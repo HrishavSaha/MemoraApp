@@ -6,6 +6,14 @@ export const CARETAKER = {
   phone: '+919876543210',
 };
 
+// Matches the doctor name already used in the seed appointment data below,
+// so the same person shows up consistently whether viewed from the patient,
+// caretaker, or doctor's own login.
+export const DOCTOR = {
+  name: 'Dr. Anjali Sharma',
+  specialty: 'Neurologist',
+};
+
 export type MockPatient = {
   id: string;
   name: string;

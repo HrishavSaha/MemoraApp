@@ -55,7 +55,6 @@
     "settings": "ছেটিংছ",
     "callHistory": "কল ইতিহাস",
     "patientsTitle": "আপোনার ৰোগীসকল",
-    "patientDetailComingSoon": "ৰোগীৰ বিৱরণ সোনকালেই আহি আছে",
     "needsAttention": "মনোযোগৰ প্ৰয়োজন",
     "checkIn": "চেক ইন কৰক"
   },
@@ -102,5 +101,46 @@
     "fieldSpecialty": "বিশেষত্ব",
     "fieldDate": "তাৰিখ",
     "validationRequired": "অনুগ্রহ কৰি প্ৰয়োজনীয় ফিল্ডসমূহ পূৰণ কৰক"
+  },
+  "doctorHome": {
+    "settings": "ছেটিংছ",
+    "pastAppointments": "পূৰ্বৰ এপয়েন্টমেণ্ট",
+    "patientsTitle": "ৰোগীসকল",
+    "noAppointment": "কোনো এপয়েন্টমেণ্ট নাই"
+  },
+  "doctorPastAppointments": {
+    "title": "পূৰ্বৰ এপয়েন্টমেণ্ট"
+  },
+  "doctorPatient": {
+    "upcomingAppointmentTitle": "আগন্তুক এপয়েন্টমেণ্ট",
+    "noUpcomingAppointment": "কোনো আগন্তুক এপয়েন্টমেণ্ট নাই",
+    "mocaTitle": "MoCA প্ৰগতি",
+    "mocaLatestTotal": "{{score}}/{{max}} (শেষৰ)",
+    "mocaNoData": "এতিয়ালৈকে কোনো MoCA ডাটা নাই",
+    "mocaLegendPrevious": "পূৰ্বৰ",
+    "mocaLegendLatest": "শেষৰ",
+    "mocaDetailTitle": "MoCA মূল্যায়ন বিৱরণ",
+    "mocaDetailDate": "তাৰিখ",
+    "mocaDetailTotal": "মুঠ স্কোৰ",
+    "mocaDetailResponseTime": "গড় প্ৰতিক্ৰিয়া সময়",
+    "mocaDetailAccuracy": "সঠিকতা",
+    "mocaDetailUploadedBy": "আপলোডকৰ্তা",
+    "domain": {
+      "visuospatial": "দৃষ্টি-স্থান",
+      "attention": "মনোযোগ",
+      "abstraction": "বিমূৰ্তন",
+      "orientation": "অভিমুখীকৰণ",
+      "recall": "স্মৰণ"
+    },
+    "adherenceTitle": "দৰব মান্যতা",
+    "adherenceSubtitle": "সাপ্তাহিক গড়",
+    "adherenceDetailTitle": "দিন-ভিত্তিক মান্যতা",
+    "gameProgressTitle": "সাপ্তাহিক খেল প্ৰগতি",
+    "legendIncrease": "উন্নতি হৈছে",
+    "legendDecrease": "অবনতি হৈছে",
+    "legendSame": "কোনো পৰিবৰ্তন নাই",
+    "caretakerNotesTitle": "পৰিচৰ্যাকৰ্তাৰ টোকা",
+    "noNotes": "এতিয়ালৈকে কোনো টোকা নাই",
+    "close": "বন্ধ কৰক"
   }
 }

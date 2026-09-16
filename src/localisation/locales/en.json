@@ -55,7 +55,6 @@
     "settings": "Settings",
     "callHistory": "Call history",
     "patientsTitle": "Your Patients",
-    "patientDetailComingSoon": "Patient details coming soon",
     "needsAttention": "Needs attention",
     "checkIn": "Check in"
   },
@@ -102,5 +101,46 @@
     "fieldSpecialty": "Specialty",
     "fieldDate": "Date",
     "validationRequired": "Please fill in the required fields"
+  },
+  "doctorHome": {
+    "settings": "Settings",
+    "pastAppointments": "Past appointments",
+    "patientsTitle": "Patients",
+    "noAppointment": "No appointment"
+  },
+  "doctorPastAppointments": {
+    "title": "Past Appointments"
+  },
+  "doctorPatient": {
+    "upcomingAppointmentTitle": "Upcoming Appointment",
+    "noUpcomingAppointment": "No upcoming appointment",
+    "mocaTitle": "MoCA Progression",
+    "mocaLatestTotal": "{{score}}/{{max}} (latest)",
+    "mocaNoData": "No MoCA data yet",
+    "mocaLegendPrevious": "Previous",
+    "mocaLegendLatest": "Latest",
+    "mocaDetailTitle": "MoCA Assessment Details",
+    "mocaDetailDate": "Date",
+    "mocaDetailTotal": "Total score",
+    "mocaDetailResponseTime": "Avg. response time",
+    "mocaDetailAccuracy": "Accuracy",
+    "mocaDetailUploadedBy": "Uploaded by",
+    "domain": {
+      "visuospatial": "Visuospatial",
+      "attention": "Attention",
+      "abstraction": "Abstraction",
+      "orientation": "Orientation",
+      "recall": "Recall"
+    },
+    "adherenceTitle": "Medication Adherence",
+    "adherenceSubtitle": "Weekly average",
+    "adherenceDetailTitle": "Day-by-day Adherence",
+    "gameProgressTitle": "Weekly Game Progress",
+    "legendIncrease": "Improved",
+    "legendDecrease": "Declined",
+    "legendSame": "No change",
+    "caretakerNotesTitle": "Caretaker Notes",
+    "noNotes": "No notes yet",
+    "close": "Close"
   }
 }

@@ -2,7 +2,13 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  useColorScheme,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { RootStackParamList } from '../navigation/types';
 
@@ -22,11 +28,12 @@ function RoleSelectionScreen() {
 
   const handleSelectRole = (role: Role) => {
     setSelectedRole(role);
-    // Doctor's destination isn't built yet.
     if (role === 'patient') {
       navigation.navigate('PatientHome');
     } else if (role === 'caretaker') {
       navigation.navigate('CaretakerHome');
+    } else if (role === 'doctor') {
+      navigation.navigate('DoctorHome');
     }
   };
 
@@ -39,7 +46,8 @@ function RoleSelectionScreen() {
       style={[
         styles.container,
         { backgroundColor, paddingTop: insets.top + 24 },
-      ]}>
+      ]}
+    >
       <Text style={[styles.title, { color: textColor }]}>
         {t('roleSelection.title')}
       </Text>
@@ -63,7 +71,8 @@ function RoleSelectionScreen() {
                     : '#EAF6F3'
                   : 'transparent',
               },
-            ]}>
+            ]}
+          >
             <Text style={[styles.roleLabel, { color: textColor }]}>
               {t(`roleSelection.${role}`)}
             </Text>

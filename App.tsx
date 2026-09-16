@@ -12,6 +12,9 @@ import { LanguageProvider } from './src/localisation/LanguageContext';
 import CaretakerCallHistoryScreen from './src/screens/caretaker/CaretakerCallHistoryScreen';
 import CaretakerHomeScreen from './src/screens/caretaker/CaretakerHomeScreen';
 import CaretakerPatientDetailScreen from './src/screens/caretaker/CaretakerPatientDetailScreen';
+import DoctorHomeScreen from './src/screens/doctor/DoctorHomeScreen';
+import DoctorPastAppointmentsScreen from './src/screens/doctor/DoctorPastAppointmentsScreen';
+import DoctorPatientDetailScreen from './src/screens/doctor/DoctorPatientDetailScreen';
 import LocalisationScreen from './src/screens/LocalisationScreen';
 import PatientHomeScreen from './src/screens/patient/PatientHomeScreen';
 import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
@@ -31,12 +34,10 @@ function App() {
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName="Splash"
-            screenOptions={{ headerShown: false }}>
+            screenOptions={{ headerShown: false }}
+          >
             <Stack.Screen name="Splash" component={SplashScreen} />
-            <Stack.Screen
-              name="Localisation"
-              component={LocalisationScreen}
-            />
+            <Stack.Screen name="Localisation" component={LocalisationScreen} />
             <Stack.Screen
               name="RoleSelection"
               component={RoleSelectionScreen}
@@ -53,6 +54,15 @@ function App() {
             <Stack.Screen
               name="CaretakerPatientDetail"
               component={CaretakerPatientDetailScreen}
+            />
+            <Stack.Screen name="DoctorHome" component={DoctorHomeScreen} />
+            <Stack.Screen
+              name="DoctorPastAppointments"
+              component={DoctorPastAppointmentsScreen}
+            />
+            <Stack.Screen
+              name="DoctorPatientDetail"
+              component={DoctorPatientDetailScreen}
             />
             <Stack.Screen name="Settings" component={SettingsScreen} />
           </Stack.Navigator>

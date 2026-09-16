@@ -55,7 +55,6 @@
     "settings": "সেটিংস",
     "callHistory": "কল ইতিহাস",
     "patientsTitle": "আপনার রোগীরা",
-    "patientDetailComingSoon": "রোগীর বিবরণ শীঘ্রই আসছে",
     "needsAttention": "মনোযোগ প্রয়োজন",
     "checkIn": "চেক ইন করুন"
   },
@@ -102,5 +101,46 @@
     "fieldSpecialty": "বিশেষত্ব",
     "fieldDate": "তারিখ",
     "validationRequired": "অনুগ্রহ করে প্রয়োজনীয় ক্ষেত্রগুলি পূরণ করুন"
+  },
+  "doctorHome": {
+    "settings": "সেটিংস",
+    "pastAppointments": "পূর্ববর্তী অ্যাপয়েন্টমেন্ট",
+    "patientsTitle": "রোগীরা",
+    "noAppointment": "কোনো অ্যাপয়েন্টমেন্ট নেই"
+  },
+  "doctorPastAppointments": {
+    "title": "পূর্ববর্তী অ্যাপয়েন্টমেন্ট"
+  },
+  "doctorPatient": {
+    "upcomingAppointmentTitle": "আসন্ন অ্যাপয়েন্টমেন্ট",
+    "noUpcomingAppointment": "কোনো আসন্ন অ্যাপয়েন্টমেন্ট নেই",
+    "mocaTitle": "MoCA অগ্রগতি",
+    "mocaLatestTotal": "{{score}}/{{max}} (সর্বশেষ)",
+    "mocaNoData": "এখনও কোনো MoCA ডেটা নেই",
+    "mocaLegendPrevious": "পূর্ববর্তী",
+    "mocaLegendLatest": "সর্বশেষ",
+    "mocaDetailTitle": "MoCA মূল্যায়ন বিবরণ",
+    "mocaDetailDate": "তারিখ",
+    "mocaDetailTotal": "মোট স্কোর",
+    "mocaDetailResponseTime": "গড় প্রতিক্রিয়া সময়",
+    "mocaDetailAccuracy": "সঠিকতা",
+    "mocaDetailUploadedBy": "আপলোডকারী",
+    "domain": {
+      "visuospatial": "দৃষ্টি-স্থান",
+      "attention": "মনোযোগ",
+      "abstraction": "বিমূর্তন",
+      "orientation": "অভিমুখীকরণ",
+      "recall": "স্মরণ"
+    },
+    "adherenceTitle": "ওষুধ মান্যতা",
+    "adherenceSubtitle": "সাপ্তাহিক গড়",
+    "adherenceDetailTitle": "দিন-ভিত্তিক মান্যতা",
+    "gameProgressTitle": "সাপ্তাহিক গেম অগ্রগতি",
+    "legendIncrease": "উন্নতি হয়েছে",
+    "legendDecrease": "অবনতি হয়েছে",
+    "legendSame": "কোনো পরিবর্তন নেই",
+    "caretakerNotesTitle": "পরিচর্যাকারীর নোট",
+    "noNotes": "এখনও কোনো নোট নেই",
+    "close": "বন্ধ করুন"
   }
 }

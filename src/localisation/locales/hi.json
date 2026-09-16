@@ -55,7 +55,6 @@
     "settings": "सेटिंग्स",
     "callHistory": "कॉल इतिहास",
     "patientsTitle": "आपके मरीज़",
-    "patientDetailComingSoon": "मरीज़ का विवरण जल्द आ रहा है",
     "needsAttention": "ध्यान देने की आवश्यकता है",
     "checkIn": "जांच करें"
   },
@@ -102,5 +101,46 @@
     "fieldSpecialty": "विशेषज्ञता",
     "fieldDate": "तिथि",
     "validationRequired": "कृपया आवश्यक फ़ील्ड भरें"
+  },
+  "doctorHome": {
+    "settings": "सेटिंग्स",
+    "pastAppointments": "पिछली नियुक्तियाँ",
+    "patientsTitle": "मरीज़",
+    "noAppointment": "कोई नियुक्ति नहीं"
+  },
+  "doctorPastAppointments": {
+    "title": "पिछली नियुक्तियाँ"
+  },
+  "doctorPatient": {
+    "upcomingAppointmentTitle": "आने वाली नियुक्ति",
+    "noUpcomingAppointment": "कोई आने वाली नियुक्ति नहीं",
+    "mocaTitle": "MoCA प्रगति",
+    "mocaLatestTotal": "{{score}}/{{max}} (नवीनतम)",
+    "mocaNoData": "अभी तक कोई MoCA डेटा नहीं",
+    "mocaLegendPrevious": "पिछला",
+    "mocaLegendLatest": "नवीनतम",
+    "mocaDetailTitle": "MoCA आकलन विवरण",
+    "mocaDetailDate": "तिथि",
+    "mocaDetailTotal": "कुल अंक",
+    "mocaDetailResponseTime": "औसत प्रतिक्रिया समय",
+    "mocaDetailAccuracy": "सटीकता",
+    "mocaDetailUploadedBy": "अपलोडकर्ता",
+    "domain": {
+      "visuospatial": "दृष्टि-स्थान",
+      "attention": "ध्यान",
+      "abstraction": "अमूर्तन",
+      "orientation": "उन्मुखीकरण",
+      "recall": "स्मरण"
+    },
+    "adherenceTitle": "दवा अनुपालन",
+    "adherenceSubtitle": "साप्ताहिक औसत",
+    "adherenceDetailTitle": "दिन-वार अनुपालन",
+    "gameProgressTitle": "साप्ताहिक खेल प्रगति",
+    "legendIncrease": "सुधार हुआ",
+    "legendDecrease": "गिरावट आई",
+    "legendSame": "कोई बदलाव नहीं",
+    "caretakerNotesTitle": "देखभालकर्ता के नोट्स",
+    "noNotes": "अभी तक कोई नोट नहीं",
+    "close": "बंद करें"
   }
 }

@@ -6,5 +6,8 @@ export type RootStackParamList = {
   CaretakerHome: undefined;
   CaretakerCallHistory: undefined;
   CaretakerPatientDetail: { patientId: string };
+  DoctorHome: undefined;
+  DoctorPastAppointments: undefined;
+  DoctorPatientDetail: { patientId: string };
   Settings: undefined;
 };
