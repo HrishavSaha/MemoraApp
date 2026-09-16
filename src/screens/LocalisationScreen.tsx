@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,6 +12,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../localisation/LanguageContext';
+import type { RootStackParamList } from '../navigation/types';
 
 type Language = {
   code: string;
@@ -39,9 +42,11 @@ const LANGUAGES: Language[] = [
 function LocalisationScreen() {
   const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { language, setLanguage } = useLanguage();
   const [cycleIndex, setCycleIndex] = useState(0);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList, 'Localisation'>>();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -72,6 +77,7 @@ function LocalisationScreen() {
       <FlatList
         data={LANGUAGES}
         keyExtractor={item => item.code}
+        style={styles.list}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => {
           const isSelected = item.code === language;
@@ -99,6 +105,12 @@ function LocalisationScreen() {
           );
         }}
       />
+
+      <Pressable
+        style={[styles.nextButton, { marginBottom: insets.bottom + 16 }]}
+        onPress={() => navigation.navigate('RoleSelection')}>
+        <Text style={styles.nextButtonLabel}>{t('localisation.next')}</Text>
+      </Pressable>
     </View>
   );
 }
@@ -117,6 +129,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 20,
   },
+  list: {
+    flex: 1,
+  },
   listContent: {
     paddingBottom: 24,
   },
@@ -134,6 +149,17 @@ const styles = StyleSheet.create({
   languageSubName: {
     fontSize: 14,
     marginTop: 2,
+  },
+  nextButton: {
+    backgroundColor: '#1B7A6D',
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  nextButtonLabel: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '700',
   },
 });
 

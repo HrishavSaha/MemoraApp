@@ -4,6 +4,14 @@
   },
   "localisation": {
     "title": "Choose your language",
-    "subtitle": "Select your preferred language"
+    "subtitle": "Select your preferred language",
+    "next": "Next"
+  },
+  "roleSelection": {
+    "title": "Login as",
+    "subtitle": "Select your role",
+    "patient": "Patient",
+    "caretaker": "Caretaker",
+    "doctor": "Doctor"
   }
 }
