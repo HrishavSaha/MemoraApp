@@ -5,7 +5,8 @@
   "localisation": {
     "title": "আপোনার ভাষা বাছনি কৰক",
     "subtitle": "আপোনার পছন্দৰ ভাষা বাছনি কৰক",
-    "next": "পৰৱৰ্তী"
+    "next": "পৰৱৰ্তী",
+    "change": "সলনি কৰক"
   },
   "roleSelection": {
     "title": "লগ ইন কৰক",
@@ -26,11 +27,32 @@
     "comingSoon": "সোনকালেই আহি আছে",
     "appointmentComingUp": "এপয়েন্টমেণ্ট আসন্ন",
     "newGame": "নতুন খেল",
+    "cancel": "বাতিল কৰক",
+    "call": "কল কৰক",
+    "callFailed": "এই ডিভাইচত কল আৰম্ভ কৰিব পৰা নগ'ল",
+    "close": "বন্ধ কৰক",
+    "getDirections": "দিহা লওক",
+    "sosConfirmTitle": "এছঅএছ এলাৰ্ট পাঠাবনে?",
+    "sosConfirmMessage": "ইয়ে আপোনাৰ পৰিচৰ্যাকৰ্তাক জানাব যে আপোনাক সহায়ৰ প্ৰয়োজন।",
+    "sosConfirmSend": "পাঠাওক",
+    "sosSentTitle": "সহায় আহি আছে",
+    "sosSentMessage": "{{name}} ক জানুওয়া হ'ল।",
+    "streakDetail": "আপুনি একেৰাহে ৭ দিন আপোনার দৈনিক ৰিমাইণ্ডাৰ সম্পূর্ণ কৰিছে। এইদৰেই আগবাঢ়ি যাওক!",
+    "gameComingSoonTitle": "খেল {{number}}",
     "reminders": {
       "water": "পানী খাওক",
       "medicineMorning": "পুৱাৰ দৰব",
       "medicineEvening": "সন্ধিয়াৰ দৰব",
       "walk": "লঘু খোজকাটা"
     }
+  },
+  "patientSettings": {
+    "back": "পিছফাল",
+    "title": "ছেটিংছ",
+    "music": "সংগীত",
+    "audioSupport": "অডিঅ সহায়",
+    "haptics": "হেপটিক্স",
+    "switchLanguage": "ভাষা সলনি কৰক",
+    "logout": "লগআউট"
   }
 }

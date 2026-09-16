@@ -1,14 +1,36 @@
-import { useState, type ReactNode } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {
+  useRef,
+  useState,
+  type ComponentRef,
+  type ReactNode,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Alert,
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  Vibration,
   View,
   useColorScheme,
+  type LayoutChangeEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isHapticsEnabled } from '../../settings/preferenceKeys';
+import type { RootStackParamList } from '../../navigation/types';
+
+const CARETAKER_NAME = 'Priya Devi';
+const CARETAKER_PHONE = '+919876543210';
+
+function vibrateIfEnabled(pattern?: number | number[]) {
+  if (isHapticsEnabled()) {
+    Vibration.vibrate(pattern);
+  }
+}
 
 type Reminder = {
   id: string;
@@ -73,6 +95,12 @@ function PatientHomeScreen() {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const [reminders, setReminders] = useState(INITIAL_REMINDERS);
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootStackParamList, 'PatientHome'>
+    >();
+  const scrollViewRef = useRef<ComponentRef<typeof ScrollView>>(null);
+  const gamesSectionY = useRef(0);
 
   const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
   const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
@@ -80,11 +108,95 @@ function PatientHomeScreen() {
   const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
 
   const toggleReminder = (id: string) => {
+    vibrateIfEnabled(20);
     setReminders(current =>
       current.map(reminder =>
         reminder.id === id ? { ...reminder, done: !reminder.done } : reminder,
       ),
     );
+  };
+
+  const handleCallCaretaker = () => {
+    Alert.alert(t('patientHome.callCaretaker'), CARETAKER_NAME, [
+      { text: t('patientHome.cancel'), style: 'cancel' },
+      {
+        text: t('patientHome.call'),
+        onPress: () => {
+          vibrateIfEnabled(20);
+          Linking.openURL(`tel:${CARETAKER_PHONE}`).catch(() => {
+            Alert.alert(t('patientHome.callFailed'));
+          });
+        },
+      },
+    ]);
+  };
+
+  const handleSos = () => {
+    Alert.alert(
+      t('patientHome.sosConfirmTitle'),
+      t('patientHome.sosConfirmMessage'),
+      [
+        { text: t('patientHome.cancel'), style: 'cancel' },
+        {
+          text: t('patientHome.sosConfirmSend'),
+          style: 'destructive',
+          onPress: () => {
+            vibrateIfEnabled([0, 200, 100, 200]);
+            Alert.alert(
+              t('patientHome.sosSentTitle'),
+              t('patientHome.sosSentMessage', { name: CARETAKER_NAME }),
+            );
+          },
+        },
+      ],
+    );
+  };
+
+  const handleStreakPress = () => {
+    vibrateIfEnabled(20);
+    Alert.alert(
+      t('patientHome.streak', { count: DAILY_STREAK }),
+      t('patientHome.streakDetail'),
+    );
+  };
+
+  const handleAppointmentPress = (appointment: Appointment) => {
+    vibrateIfEnabled(20);
+    Alert.alert(
+      appointment.doctorName,
+      `${appointment.specialty} · ${appointment.dateTime}`,
+      [
+        { text: t('patientHome.close'), style: 'cancel' },
+        {
+          text: t('patientHome.getDirections'),
+          onPress: () => {
+            const query = encodeURIComponent(
+              `${appointment.doctorName} ${appointment.specialty}`,
+            );
+            Linking.openURL(`https://maps.google.com/?q=${query}`);
+          },
+        },
+      ],
+    );
+  };
+
+  const handleGamePress = (index: number) => {
+    vibrateIfEnabled(20);
+    Alert.alert(
+      t('patientHome.gameComingSoonTitle', { number: index + 1 }),
+      t('patientHome.comingSoon'),
+    );
+  };
+
+  const handleNewGamePress = () => {
+    scrollViewRef.current?.scrollTo({
+      y: Math.max(gamesSectionY.current - 12, 0),
+      animated: true,
+    });
+  };
+
+  const handleGamesSectionLayout = (event: LayoutChangeEvent) => {
+    gamesSectionY.current = event.nativeEvent.layout.y;
   };
 
   return (
@@ -107,29 +219,50 @@ function PatientHomeScreen() {
         <View style={styles.headerActions}>
           <Pressable
             accessibilityLabel={t('patientHome.callCaretaker')}
-            style={[styles.iconButton, { backgroundColor: cardColor }]}>
+            onPress={handleCallCaretaker}
+            style={({ pressed }) => [
+              styles.iconButton,
+              { backgroundColor: cardColor },
+              pressed && styles.pressed,
+            ]}>
             <Text style={styles.iconGlyph}>📞</Text>
           </Pressable>
           <Pressable
             accessibilityLabel={t('patientHome.settings')}
-            style={[styles.iconButton, { backgroundColor: cardColor }]}>
+            onPress={() => navigation.navigate('PatientSettings')}
+            style={({ pressed }) => [
+              styles.iconButton,
+              { backgroundColor: cardColor },
+              pressed && styles.pressed,
+            ]}>
             <Text style={styles.iconGlyph}>⚙️</Text>
           </Pressable>
           <Pressable
             accessibilityLabel={t('patientHome.sos')}
-            style={styles.sosButton}>
+            onPress={handleSos}
+            style={({ pressed }) => [
+              styles.sosButton,
+              pressed && styles.pressed,
+            ]}>
             <Text style={styles.sosLabel}>{t('patientHome.sos')}</Text>
           </Pressable>
         </View>
       </View>
 
       <ScrollView
+        ref={scrollViewRef}
         contentContainerStyle={[
           styles.scrollContent,
           { paddingBottom: insets.bottom + 24 },
         ]}
         showsVerticalScrollIndicator={false}>
-        <View style={[styles.streakCard, { backgroundColor: cardColor }]}>
+        <Pressable
+          onPress={handleStreakPress}
+          style={({ pressed }) => [
+            styles.streakCard,
+            { backgroundColor: cardColor },
+            pressed && styles.pressed,
+          ]}>
           <Text style={styles.streakGlyph}>🔥</Text>
           <View>
             <Text style={[styles.streakCount, { color: textColor }]}>
@@ -139,7 +272,7 @@ function PatientHomeScreen() {
               {t('patientHome.keepItUp')}
             </Text>
           </View>
-        </View>
+        </Pressable>
 
         <SectionTitle color={textColor}>
           {t('patientHome.remindersTitle')}
@@ -184,12 +317,14 @@ function PatientHomeScreen() {
         </SectionTitle>
         <View style={[styles.card, { backgroundColor: cardColor }]}>
           {APPOINTMENTS.map((appointment, index) => (
-            <View
+            <Pressable
               key={appointment.id}
-              style={[
+              onPress={() => handleAppointmentPress(appointment)}
+              style={({ pressed }) => [
                 styles.appointmentRow,
                 index === APPOINTMENTS.length - 1 &&
                   styles.appointmentRowLast,
+                pressed && styles.pressed,
               ]}>
               <View style={styles.appointmentGlyphWrap}>
                 <Text style={styles.appointmentGlyph}>🗓️</Text>
@@ -202,19 +337,22 @@ function PatientHomeScreen() {
                   {appointment.specialty} · {appointment.dateTime}
                 </Text>
               </View>
-            </View>
+            </Pressable>
           ))}
         </View>
 
-        <SectionTitle color={textColor}>
-          {t('patientHome.gamesTitle')}
-        </SectionTitle>
-        <GamesGrid
-          count={GAME_PLACEHOLDER_COUNT}
-          cardColor={cardColor}
-          textColor={subTextColor}
-          label={t('patientHome.comingSoon')}
-        />
+        <View onLayout={handleGamesSectionLayout}>
+          <SectionTitle color={textColor}>
+            {t('patientHome.gamesTitle')}
+          </SectionTitle>
+          <GamesGrid
+            count={GAME_PLACEHOLDER_COUNT}
+            cardColor={cardColor}
+            textColor={subTextColor}
+            label={t('patientHome.comingSoon')}
+            onPressGame={handleGamePress}
+          />
+        </View>
 
         <View
           style={[styles.promoCard, { backgroundColor: cardColor }]}>
@@ -226,7 +364,12 @@ function PatientHomeScreen() {
               {APPOINTMENTS[0].doctorName} · {APPOINTMENTS[0].dateTime}
             </Text>
           </View>
-          <Pressable style={styles.newGameButton}>
+          <Pressable
+            onPress={handleNewGamePress}
+            style={({ pressed }) => [
+              styles.newGameButton,
+              pressed && styles.pressed,
+            ]}>
             <Text style={styles.newGameButtonLabel}>
               {t('patientHome.newGame')}
             </Text>
@@ -254,11 +397,13 @@ function GamesGrid({
   cardColor,
   textColor,
   label,
+  onPressGame,
 }: {
   count: number;
   cardColor: string;
   textColor: string;
   label: string;
+  onPressGame: (index: number) => void;
 }) {
   const rows: number[][] = [];
   for (let i = 0; i < count; i += 2) {
@@ -270,14 +415,19 @@ function GamesGrid({
       {rows.map(row => (
         <View key={row[0]} style={styles.gamesRow}>
           {row.map(index => (
-            <View
+            <Pressable
               key={index}
-              style={[styles.gameCard, { backgroundColor: cardColor }]}>
+              onPress={() => onPressGame(index)}
+              style={({ pressed }) => [
+                styles.gameCard,
+                { backgroundColor: cardColor },
+                pressed && styles.pressed,
+              ]}>
               <Text style={styles.placeholderGlyph}>🎮</Text>
               <Text style={[styles.placeholderLabel, { color: textColor }]}>
                 {label}
               </Text>
-            </View>
+            </Pressable>
           ))}
         </View>
       ))}
@@ -288,6 +438,9 @@ function GamesGrid({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   header: {
     flexDirection: 'row',

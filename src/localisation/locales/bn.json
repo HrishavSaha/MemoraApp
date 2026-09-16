@@ -5,7 +5,8 @@
   "localisation": {
     "title": "আপনার ভাষা নির্বাচন করুন",
     "subtitle": "আপনার পছন্দের ভাষা নির্বাচন করুন",
-    "next": "পরবর্তী"
+    "next": "পরবর্তী",
+    "change": "পরিবর্তন করুন"
   },
   "roleSelection": {
     "title": "লগইন করুন",
@@ -26,11 +27,32 @@
     "comingSoon": "শীঘ্রই আসছে",
     "appointmentComingUp": "অ্যাপয়েন্টমেন্ট কাছে আসছে",
     "newGame": "নতুন গেম",
+    "cancel": "বাতিল করুন",
+    "call": "কল করুন",
+    "callFailed": "এই ডিভাইসে কল শুরু করা যায়নি",
+    "close": "বন্ধ করুন",
+    "getDirections": "দিকনির্দেশ নিন",
+    "sosConfirmTitle": "এসওএস অ্যালার্ট পাঠাবেন?",
+    "sosConfirmMessage": "এটি আপনার পরিচর্যাকারীকে জানাবে যে আপনার সাহায্য প্রয়োজন।",
+    "sosConfirmSend": "পাঠান",
+    "sosSentTitle": "সাহায্য আসছে",
+    "sosSentMessage": "{{name}} কে জানানো হয়েছে।",
+    "streakDetail": "আপনি টানা ৭ দিন আপনার দৈনিক রিমাইন্ডার সম্পন্ন করেছেন। এভাবেই চালিয়ে যান!",
+    "gameComingSoonTitle": "গেম {{number}}",
     "reminders": {
       "water": "জল পান করুন",
       "medicineMorning": "সকালের ওষুধ",
       "medicineEvening": "সন্ধ্যার ওষুধ",
       "walk": "হালকা হাঁটা"
     }
+  },
+  "patientSettings": {
+    "back": "পেছনে",
+    "title": "সেটিংস",
+    "music": "সঙ্গীত",
+    "audioSupport": "অডিও সহায়তা",
+    "haptics": "হ্যাপটিক্স",
+    "switchLanguage": "ভাষা পরিবর্তন করুন",
+    "logout": "লগআউট"
   }
 }

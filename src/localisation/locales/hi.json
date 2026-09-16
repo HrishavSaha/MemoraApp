@@ -5,7 +5,8 @@
   "localisation": {
     "title": "अपनी भाषा चुनें",
     "subtitle": "अपनी पसंदीदा भाषा चुनें",
-    "next": "आगे"
+    "next": "आगे",
+    "change": "बदलें"
   },
   "roleSelection": {
     "title": "लॉगिन करें",
@@ -26,11 +27,32 @@
     "comingSoon": "जल्द आ रहा है",
     "appointmentComingUp": "नियुक्ति नजदीक है",
     "newGame": "नया खेल",
+    "cancel": "रद्द करें",
+    "call": "कॉल करें",
+    "callFailed": "इस डिवाइस पर कॉल शुरू नहीं हो सकी",
+    "close": "बंद करें",
+    "getDirections": "दिशा-निर्देश पाएं",
+    "sosConfirmTitle": "एसओएस अलर्ट भेजें?",
+    "sosConfirmMessage": "इससे आपके देखभालकर्ता को सूचित किया जाएगा कि आपको मदद चाहिए।",
+    "sosConfirmSend": "भेजें",
+    "sosSentTitle": "मदद आ रही है",
+    "sosSentMessage": "{{name}} को सूचित कर दिया गया है।",
+    "streakDetail": "आपने लगातार 7 दिनों तक अपने दैनिक रिमाइंडर पूरे किए हैं। ऐसे ही जारी रखें!",
+    "gameComingSoonTitle": "खेल {{number}}",
     "reminders": {
       "water": "पानी पिएं",
       "medicineMorning": "सुबह की दवा",
       "medicineEvening": "शाम की दवा",
       "walk": "थोड़ी सैर"
     }
+  },
+  "patientSettings": {
+    "back": "वापस",
+    "title": "सेटिंग्स",
+    "music": "संगीत",
+    "audioSupport": "ऑडियो सहायता",
+    "haptics": "हैप्टिक्स",
+    "switchLanguage": "भाषा बदलें",
+    "logout": "लॉगआउट"
   }
 }

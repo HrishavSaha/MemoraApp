@@ -1,4 +1,8 @@
-import { useNavigation } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  type RouteProp,
+} from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -46,7 +50,11 @@ function LocalisationScreen() {
   const { language, setLanguage } = useLanguage();
   const [cycleIndex, setCycleIndex] = useState(0);
   const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList, 'Localisation'>>();
+    useNavigation<
+      NativeStackNavigationProp<RootStackParamList, 'Localisation'>
+    >();
+  const route = useRoute<RouteProp<RootStackParamList, 'Localisation'>>();
+  const fromSettings = route.params?.fromSettings ?? false;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -108,8 +116,14 @@ function LocalisationScreen() {
 
       <Pressable
         style={[styles.nextButton, { marginBottom: insets.bottom + 16 }]}
-        onPress={() => navigation.navigate('RoleSelection')}>
-        <Text style={styles.nextButtonLabel}>{t('localisation.next')}</Text>
+        onPress={() =>
+          fromSettings
+            ? navigation.goBack()
+            : navigation.navigate('RoleSelection')
+        }>
+        <Text style={styles.nextButtonLabel}>
+          {fromSettings ? t('localisation.change') : t('localisation.next')}
+        </Text>
       </Pressable>
     </View>
   );

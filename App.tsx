@@ -11,6 +11,7 @@ import './src/localisation/i18n';
 import { LanguageProvider } from './src/localisation/LanguageContext';
 import LocalisationScreen from './src/screens/LocalisationScreen';
 import PatientHomeScreen from './src/screens/patient/PatientHomeScreen';
+import PatientSettingsScreen from './src/screens/patient/PatientSettingsScreen';
 import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import type { RootStackParamList } from './src/navigation/types';
@@ -38,6 +39,10 @@ function App() {
               component={RoleSelectionScreen}
             />
             <Stack.Screen name="PatientHome" component={PatientHomeScreen} />
+            <Stack.Screen
+              name="PatientSettings"
+              component={PatientSettingsScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </LanguageProvider>

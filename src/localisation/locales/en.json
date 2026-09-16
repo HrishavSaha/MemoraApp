@@ -5,7 +5,8 @@
   "localisation": {
     "title": "Choose your language",
     "subtitle": "Select your preferred language",
-    "next": "Next"
+    "next": "Next",
+    "change": "Change"
   },
   "roleSelection": {
     "title": "Login as",
@@ -26,11 +27,32 @@
     "comingSoon": "Coming soon",
     "appointmentComingUp": "Appointment coming up",
     "newGame": "New game",
+    "cancel": "Cancel",
+    "call": "Call",
+    "callFailed": "Couldn't start the call on this device",
+    "close": "Close",
+    "getDirections": "Get directions",
+    "sosConfirmTitle": "Send SOS alert?",
+    "sosConfirmMessage": "This will notify your caretaker that you need help.",
+    "sosConfirmSend": "Send",
+    "sosSentTitle": "Help is on the way",
+    "sosSentMessage": "{{name}} has been notified.",
+    "streakDetail": "You've completed your daily reminders for 7 days in a row. Keep it going!",
+    "gameComingSoonTitle": "Game {{number}}",
     "reminders": {
       "water": "Drink Water",
       "medicineMorning": "Morning Medicine",
       "medicineEvening": "Evening Medicine",
       "walk": "Light Walk"
     }
+  },
+  "patientSettings": {
+    "back": "Back",
+    "title": "Settings",
+    "music": "Music",
+    "audioSupport": "Audio support",
+    "haptics": "Haptics",
+    "switchLanguage": "Switch language",
+    "logout": "Logout"
   }
 }
