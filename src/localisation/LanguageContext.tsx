@@ -1,12 +1,11 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
   type ReactNode,
 } from 'react';
+import { storage } from '../storage/mmkv';
 import i18n from './i18n';
 
 const STORAGE_KEY = '@memora/language';
@@ -14,7 +13,6 @@ const STORAGE_KEY = '@memora/language';
 type LanguageContextValue = {
   language: string;
   setLanguage: (code: string) => void;
-  isHydrated: boolean;
 };
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(
@@ -22,28 +20,23 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState(i18n.language);
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  useEffect(() => {
-    AsyncStorage.getItem(STORAGE_KEY)
-      .then(stored => {
-        if (stored) {
-          i18n.changeLanguage(stored);
-          setLanguageState(stored);
-        }
-      })
-      .finally(() => setIsHydrated(true));
-  }, []);
+  const [language, setLanguageState] = useState(() => {
+    const stored = storage.getString(STORAGE_KEY);
+    if (stored) {
+      i18n.changeLanguage(stored);
+      return stored;
+    }
+    return i18n.language;
+  });
 
   const setLanguage = useCallback((code: string) => {
     i18n.changeLanguage(code);
     setLanguageState(code);
-    AsyncStorage.setItem(STORAGE_KEY, code).catch(() => {});
+    storage.set(STORAGE_KEY, code);
   }, []);
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, isHydrated }}>
+    <LanguageContext.Provider value={{ language, setLanguage }}>
       {children}
     </LanguageContext.Provider>
   );
