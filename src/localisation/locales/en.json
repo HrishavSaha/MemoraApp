@@ -17,13 +17,15 @@
   "patientHome": {
     "callCaretaker": "Call caretaker",
     "settings": "Settings",
+    "sos": "SOS",
     "streak": "{{count}}-day streak",
     "keepItUp": "Keep it up!",
     "remindersTitle": "Today's Reminders",
     "appointmentsTitle": "Upcoming Appointments",
     "gamesTitle": "Games",
-    "mocaTitle": "MoCA Test",
     "comingSoon": "Coming soon",
+    "appointmentComingUp": "Appointment coming up",
+    "newGame": "New game",
     "reminders": {
       "water": "Drink Water",
       "medicineMorning": "Morning Medicine",

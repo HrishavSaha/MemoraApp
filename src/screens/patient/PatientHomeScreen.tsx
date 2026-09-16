@@ -67,7 +67,6 @@ const APPOINTMENTS: Appointment[] = [
 
 const DAILY_STREAK = 7;
 const GAME_PLACEHOLDER_COUNT = 4;
-const MOCA_PLACEHOLDER_COUNT = 5;
 
 function PatientHomeScreen() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -115,6 +114,11 @@ function PatientHomeScreen() {
             accessibilityLabel={t('patientHome.settings')}
             style={[styles.iconButton, { backgroundColor: cardColor }]}>
             <Text style={styles.iconGlyph}>⚙️</Text>
+          </Pressable>
+          <Pressable
+            accessibilityLabel={t('patientHome.sos')}
+            style={styles.sosButton}>
+            <Text style={styles.sosLabel}>{t('patientHome.sos')}</Text>
           </Pressable>
         </View>
       </View>
@@ -205,26 +209,29 @@ function PatientHomeScreen() {
         <SectionTitle color={textColor}>
           {t('patientHome.gamesTitle')}
         </SectionTitle>
-        <PlaceholderRow
+        <GamesGrid
           count={GAME_PLACEHOLDER_COUNT}
-          glyph="🎮"
-          accentColor="#1B7A6D"
           cardColor={cardColor}
           textColor={subTextColor}
           label={t('patientHome.comingSoon')}
         />
 
-        <SectionTitle color={textColor}>
-          {t('patientHome.mocaTitle')}
-        </SectionTitle>
-        <PlaceholderRow
-          count={MOCA_PLACEHOLDER_COUNT}
-          glyph="🧠"
-          accentColor="#5B4FCF"
-          cardColor={cardColor}
-          textColor={subTextColor}
-          label={t('patientHome.comingSoon')}
-        />
+        <View
+          style={[styles.promoCard, { backgroundColor: cardColor }]}>
+          <View style={styles.promoTextGroup}>
+            <Text style={[styles.promoTitle, { color: textColor }]}>
+              {t('patientHome.appointmentComingUp')}
+            </Text>
+            <Text style={[styles.promoSubtitle, { color: subTextColor }]}>
+              {APPOINTMENTS[0].doctorName} · {APPOINTMENTS[0].dateTime}
+            </Text>
+          </View>
+          <Pressable style={styles.newGameButton}>
+            <Text style={styles.newGameButtonLabel}>
+              {t('patientHome.newGame')}
+            </Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </View>
   );
@@ -242,42 +249,39 @@ function SectionTitle({
   );
 }
 
-function PlaceholderRow({
+function GamesGrid({
   count,
-  glyph,
-  accentColor,
   cardColor,
   textColor,
   label,
 }: {
   count: number;
-  glyph: string;
-  accentColor: string;
   cardColor: string;
   textColor: string;
   label: string;
 }) {
+  const rows: number[][] = [];
+  for (let i = 0; i < count; i += 2) {
+    rows.push([i, i + 1].filter(index => index < count));
+  }
+
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.placeholderRow}>
-      {Array.from({ length: count }, (_, index) => (
-        <View
-          key={index}
-          style={[
-            styles.placeholderCard,
-            { backgroundColor: cardColor, borderColor: accentColor },
-          ]}>
-          <Text style={[styles.placeholderGlyph, { color: accentColor }]}>
-            {glyph}
-          </Text>
-          <Text style={[styles.placeholderLabel, { color: textColor }]}>
-            {label}
-          </Text>
+    <View style={styles.gamesGrid}>
+      {rows.map(row => (
+        <View key={row[0]} style={styles.gamesRow}>
+          {row.map(index => (
+            <View
+              key={index}
+              style={[styles.gameCard, { backgroundColor: cardColor }]}>
+              <Text style={styles.placeholderGlyph}>🎮</Text>
+              <Text style={[styles.placeholderLabel, { color: textColor }]}>
+                {label}
+              </Text>
+            </View>
+          ))}
         </View>
       ))}
-    </ScrollView>
+    </View>
   );
 }
 
@@ -331,6 +335,20 @@ const styles = StyleSheet.create({
   },
   iconGlyph: {
     fontSize: 20,
+  },
+  sosButton: {
+    height: 44,
+    paddingHorizontal: 16,
+    borderRadius: 22,
+    backgroundColor: '#D64545',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sosLabel: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '800',
+    letterSpacing: 0.5,
   },
   scrollContent: {
     paddingHorizontal: 24,
@@ -430,15 +448,19 @@ const styles = StyleSheet.create({
   appointmentGlyph: {
     fontSize: 22,
   },
-  placeholderRow: {
+  gamesGrid: {
     gap: 12,
-    paddingBottom: 4,
   },
-  placeholderCard: {
-    width: 110,
-    height: 110,
+  gamesRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  gameCard: {
+    flex: 1,
+    aspectRatio: 1,
     borderRadius: 16,
     borderWidth: 1.5,
+    borderColor: '#1B7A6D',
     borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',
@@ -450,6 +472,37 @@ const styles = StyleSheet.create({
   placeholderLabel: {
     fontSize: 12,
     fontWeight: '600',
+  },
+  promoCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+    borderRadius: 16,
+    padding: 18,
+    marginTop: 20,
+  },
+  promoTextGroup: {
+    flex: 1,
+  },
+  promoTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  promoSubtitle: {
+    fontSize: 13,
+    marginTop: 2,
+  },
+  newGameButton: {
+    backgroundColor: '#1B7A6D',
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  newGameButtonLabel: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
   },
 });
 

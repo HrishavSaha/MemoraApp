@@ -17,13 +17,15 @@
   "patientHome": {
     "callCaretaker": "देखभालकर्ता को कॉल करें",
     "settings": "सेटिंग्स",
+    "sos": "एसओएस",
     "streak": "{{count}} दिन की लगातार श्रृंखला",
     "keepItUp": "ऐसे ही जारी रखें!",
     "remindersTitle": "आज के रिमाइंडर",
     "appointmentsTitle": "आने वाली नियुक्तियाँ",
     "gamesTitle": "खेल",
-    "mocaTitle": "MoCA टेस्ट",
     "comingSoon": "जल्द आ रहा है",
+    "appointmentComingUp": "नियुक्ति नजदीक है",
+    "newGame": "नया खेल",
     "reminders": {
       "water": "पानी पिएं",
       "medicineMorning": "सुबह की दवा",

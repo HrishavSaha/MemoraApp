@@ -17,13 +17,15 @@
   "patientHome": {
     "callCaretaker": "পৰিচৰ্যাকৰ্তাক কল কৰক",
     "settings": "ছেটিংছ",
+    "sos": "এছঅএছ",
     "streak": "{{count}} দিনৰ ধাৰা",
     "keepItUp": "এইদৰেই আগবাঢ়ি যাওক!",
     "remindersTitle": "আজিৰ ৰিমাইণ্ডাৰ",
     "appointmentsTitle": "আগন্তুক এপয়েন্টমেণ্ট",
     "gamesTitle": "খেল",
-    "mocaTitle": "MoCA পৰীক্ষা",
     "comingSoon": "সোনকালেই আহি আছে",
+    "appointmentComingUp": "এপয়েন্টমেণ্ট আসন্ন",
+    "newGame": "নতুন খেল",
     "reminders": {
       "water": "পানী খাওক",
       "medicineMorning": "পুৱাৰ দৰব",
