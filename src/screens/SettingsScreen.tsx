@@ -17,18 +17,16 @@ import {
   HAPTICS_KEY,
   MUSIC_KEY,
   readToggle,
-} from '../../settings/preferenceKeys';
-import { storage } from '../../storage/mmkv';
-import type { RootStackParamList } from '../../navigation/types';
+} from '../settings/preferenceKeys';
+import { storage } from '../storage/mmkv';
+import type { RootStackParamList } from '../navigation/types';
 
-function PatientSettingsScreen() {
+function SettingsScreen() {
   const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
-    useNavigation<
-      NativeStackNavigationProp<RootStackParamList, 'PatientSettings'>
-    >();
+    useNavigation<NativeStackNavigationProp<RootStackParamList, 'Settings'>>();
 
   const [musicEnabled, setMusicEnabled] = useState(() =>
     readToggle(MUSIC_KEY, true),
@@ -66,13 +64,13 @@ function PatientSettingsScreen() {
     <View style={[styles.screen, { backgroundColor }]}>
       <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <Pressable
-          accessibilityLabel={t('patientSettings.back')}
+          accessibilityLabel={t('settings.back')}
           onPress={() => navigation.goBack()}
           style={[styles.backButton, { backgroundColor: cardColor }]}>
           <Text style={styles.backGlyph}>←</Text>
         </Pressable>
         <Text style={[styles.headerTitle, { color: textColor }]}>
-          {t('patientSettings.title')}
+          {t('settings.title')}
         </Text>
       </View>
 
@@ -86,7 +84,7 @@ function PatientSettingsScreen() {
           <View style={styles.settingRow}>
             <Text style={styles.settingIcon}>🎵</Text>
             <Text style={[styles.settingLabel, { color: textColor }]}>
-              {t('patientSettings.music')}
+              {t('settings.music')}
             </Text>
             <Switch value={musicEnabled} onValueChange={toggleMusic} />
           </View>
@@ -94,7 +92,7 @@ function PatientSettingsScreen() {
           <View style={styles.settingRow}>
             <Text style={styles.settingIcon}>🗣️</Text>
             <Text style={[styles.settingLabel, { color: textColor }]}>
-              {t('patientSettings.audioSupport')}
+              {t('settings.audioSupport')}
             </Text>
             <Switch
               value={audioSupportEnabled}
@@ -105,7 +103,7 @@ function PatientSettingsScreen() {
           <View style={styles.settingRow}>
             <Text style={styles.settingIcon}>📳</Text>
             <Text style={[styles.settingLabel, { color: textColor }]}>
-              {t('patientSettings.haptics')}
+              {t('settings.haptics')}
             </Text>
             <Switch value={hapticsEnabled} onValueChange={toggleHaptics} />
           </View>
@@ -117,14 +115,14 @@ function PatientSettingsScreen() {
             style={[styles.settingRow, styles.settingRowLast]}>
             <Text style={styles.settingIcon}>🌐</Text>
             <Text style={[styles.settingLabel, { color: textColor }]}>
-              {t('patientSettings.switchLanguage')}
+              {t('settings.switchLanguage')}
             </Text>
             <Text style={[styles.chevron, { color: subTextColor }]}>›</Text>
           </Pressable>
         </View>
 
         <Pressable style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutLabel}>{t('patientSettings.logout')}</Text>
+          <Text style={styles.logoutLabel}>{t('settings.logout')}</Text>
         </Pressable>
       </ScrollView>
     </View>
@@ -201,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PatientSettingsScreen;
+export default SettingsScreen;

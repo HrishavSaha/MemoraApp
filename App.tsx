@@ -9,10 +9,13 @@ import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import './src/localisation/i18n';
 import { LanguageProvider } from './src/localisation/LanguageContext';
+import CaretakerCallHistoryScreen from './src/screens/caretaker/CaretakerCallHistoryScreen';
+import CaretakerHomeScreen from './src/screens/caretaker/CaretakerHomeScreen';
+import CaretakerPatientDetailScreen from './src/screens/caretaker/CaretakerPatientDetailScreen';
 import LocalisationScreen from './src/screens/LocalisationScreen';
 import PatientHomeScreen from './src/screens/patient/PatientHomeScreen';
-import PatientSettingsScreen from './src/screens/patient/PatientSettingsScreen';
 import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import type { RootStackParamList } from './src/navigation/types';
 
@@ -40,9 +43,18 @@ function App() {
             />
             <Stack.Screen name="PatientHome" component={PatientHomeScreen} />
             <Stack.Screen
-              name="PatientSettings"
-              component={PatientSettingsScreen}
+              name="CaretakerHome"
+              component={CaretakerHomeScreen}
             />
+            <Stack.Screen
+              name="CaretakerCallHistory"
+              component={CaretakerCallHistoryScreen}
+            />
+            <Stack.Screen
+              name="CaretakerPatientDetail"
+              component={CaretakerPatientDetailScreen}
+            />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </LanguageProvider>

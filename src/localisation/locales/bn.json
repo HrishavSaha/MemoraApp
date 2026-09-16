@@ -39,14 +39,10 @@
     "sosSentMessage": "{{name}} কে জানানো হয়েছে।",
     "streakDetail": "আপনি টানা ৭ দিন আপনার দৈনিক রিমাইন্ডার সম্পন্ন করেছেন। এভাবেই চালিয়ে যান!",
     "gameComingSoonTitle": "গেম {{number}}",
-    "reminders": {
-      "water": "জল পান করুন",
-      "medicineMorning": "সকালের ওষুধ",
-      "medicineEvening": "সন্ধ্যার ওষুধ",
-      "walk": "হালকা হাঁটা"
-    }
+    "noAppointments": "কোনো আসন্ন অ্যাপয়েন্টমেন্ট নেই",
+    "newGamePromptTitle": "নতুন গেম চেষ্টা করুন"
   },
-  "patientSettings": {
+  "settings": {
     "back": "পেছনে",
     "title": "সেটিংস",
     "music": "সঙ্গীত",
@@ -54,5 +50,55 @@
     "haptics": "হ্যাপটিক্স",
     "switchLanguage": "ভাষা পরিবর্তন করুন",
     "logout": "লগআউট"
+  },
+  "caretakerHome": {
+    "settings": "সেটিংস",
+    "callHistory": "কল ইতিহাস",
+    "patientsTitle": "আপনার রোগীরা",
+    "patientDetailComingSoon": "রোগীর বিবরণ শীঘ্রই আসছে"
+  },
+  "callHistory": {
+    "title": "কল ইতিহাস",
+    "missed": "মিসড",
+    "addNote": "+ ডাক্তারের জন্য নোট",
+    "editNote": "ডাক্তারের জন্য নোট সম্পাদনা করুন",
+    "noteModalTitle": "ডাক্তারের জন্য নোট",
+    "noteFieldLabel": "নোট",
+    "cancel": "বাতিল করুন",
+    "save": "সংরক্ষণ করুন"
+  },
+  "caretakerPatient": {
+    "weeklyActivity": "এই সপ্তাহে {{hours}} ঘণ্টা সক্রিয়",
+    "remindersTitle": "রিমাইন্ডার",
+    "addTask": "+ কাজ",
+    "addMedicine": "+ ওষুধ",
+    "appointmentsTitle": "আসন্ন অ্যাপয়েন্টমেন্ট",
+    "addAppointment": "+ অ্যাপয়েন্টমেন্ট যুক্ত করুন",
+    "noAppointments": "কোনো আসন্ন অ্যাপয়েন্টমেন্ট নেই",
+    "editAppointment": "অ্যাপয়েন্টমেন্ট সম্পাদনা করুন",
+    "deleteAppointment": "অ্যাপয়েন্টমেন্ট মুছুন",
+    "deleteAppointmentConfirmTitle": "এই অ্যাপয়েন্টমেন্ট মুছবেন?",
+    "deleteAppointmentConfirmMessage": "এটি ফিরিয়ে আনা যাবে না।",
+    "editReminder": "সম্পাদনা করুন",
+    "deleteReminder": "মুছুন",
+    "deleteReminderConfirmTitle": "এই রিমাইন্ডার মুছবেন?",
+    "deleteReminderConfirmMessage": "এটি ফিরিয়ে আনা যাবে না।",
+    "delete": "মুছুন",
+    "cancel": "বাতিল করুন",
+    "save": "সংরক্ষণ করুন",
+    "addTaskTitle": "কাজ যুক্ত করুন",
+    "addMedicineTitle": "ওষুধ যুক্ত করুন",
+    "editTaskTitle": "কাজ সম্পাদনা করুন",
+    "editMedicineTitle": "ওষুধ সম্পাদনা করুন",
+    "editAppointmentTitle": "অ্যাপয়েন্টমেন্ট সম্পাদনা করুন",
+    "addAppointmentTitle": "অ্যাপয়েন্টমেন্ট যুক্ত করুন",
+    "fieldName": "নাম",
+    "fieldTime": "সময়",
+    "fieldDescription": "বিবরণ",
+    "fieldDosage": "মাত্রা",
+    "fieldDoctorName": "ডাক্তারের নাম",
+    "fieldSpecialty": "বিশেষত্ব",
+    "fieldDate": "তারিখ",
+    "validationRequired": "অনুগ্রহ করে প্রয়োজনীয় ক্ষেত্রগুলি পূরণ করুন"
   }
 }

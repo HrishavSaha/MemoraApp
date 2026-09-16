@@ -1,11 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import {
-  useRef,
-  useState,
-  type ComponentRef,
-  type ReactNode,
-} from 'react';
+import { useRef, type ComponentRef, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -20,72 +15,20 @@ import {
   type LayoutChangeEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { Appointment } from '../../data/appointments';
+import { CARETAKER, PATIENTS } from '../../data/mockPeople';
+import { useAppointments } from '../../hooks/useAppointments';
+import { useReminders } from '../../hooks/useReminders';
 import { isHapticsEnabled } from '../../settings/preferenceKeys';
 import type { RootStackParamList } from '../../navigation/types';
 
-const CARETAKER_NAME = 'Priya Devi';
-const CARETAKER_PHONE = '+919876543210';
+const CURRENT_PATIENT = PATIENTS[0];
 
 function vibrateIfEnabled(pattern?: number | number[]) {
   if (isHapticsEnabled()) {
     Vibration.vibrate(pattern);
   }
 }
-
-type Reminder = {
-  id: string;
-  icon: string;
-  labelKey: string;
-  time: string;
-  done: boolean;
-};
-
-type Appointment = {
-  id: string;
-  doctorName: string;
-  specialty: string;
-  dateTime: string;
-};
-
-const INITIAL_REMINDERS: Reminder[] = [
-  { id: 'water', icon: '💧', labelKey: 'water', time: '8:00 AM', done: true },
-  {
-    id: 'medicineMorning',
-    icon: '💊',
-    labelKey: 'medicineMorning',
-    time: '9:00 AM',
-    done: true,
-  },
-  {
-    id: 'walk',
-    icon: '🚶',
-    labelKey: 'walk',
-    time: '5:00 PM',
-    done: false,
-  },
-  {
-    id: 'medicineEvening',
-    icon: '💊',
-    labelKey: 'medicineEvening',
-    time: '8:00 PM',
-    done: false,
-  },
-];
-
-const APPOINTMENTS: Appointment[] = [
-  {
-    id: '1',
-    doctorName: 'Dr. Anjali Sharma',
-    specialty: 'Neurologist',
-    dateTime: 'Mon, 22 Sep · 10:30 AM',
-  },
-  {
-    id: '2',
-    doctorName: 'Dr. Bikash Bora',
-    specialty: 'General Physician',
-    dateTime: 'Fri, 26 Sep · 4:00 PM',
-  },
-];
 
 const DAILY_STREAK = 7;
 const GAME_PLACEHOLDER_COUNT = 4;
@@ -94,7 +37,10 @@ function PatientHomeScreen() {
   const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const [reminders, setReminders] = useState(INITIAL_REMINDERS);
+  const { reminders, toggle: toggleReminderState } = useReminders(
+    CURRENT_PATIENT.id,
+  );
+  const { appointments } = useAppointments(CURRENT_PATIENT.id);
   const navigation =
     useNavigation<
       NativeStackNavigationProp<RootStackParamList, 'PatientHome'>
@@ -109,21 +55,17 @@ function PatientHomeScreen() {
 
   const toggleReminder = (id: string) => {
     vibrateIfEnabled(20);
-    setReminders(current =>
-      current.map(reminder =>
-        reminder.id === id ? { ...reminder, done: !reminder.done } : reminder,
-      ),
-    );
+    toggleReminderState(id);
   };
 
   const handleCallCaretaker = () => {
-    Alert.alert(t('patientHome.callCaretaker'), CARETAKER_NAME, [
+    Alert.alert(t('patientHome.callCaretaker'), CARETAKER.name, [
       { text: t('patientHome.cancel'), style: 'cancel' },
       {
         text: t('patientHome.call'),
         onPress: () => {
           vibrateIfEnabled(20);
-          Linking.openURL(`tel:${CARETAKER_PHONE}`).catch(() => {
+          Linking.openURL(`tel:${CARETAKER.phone}`).catch(() => {
             Alert.alert(t('patientHome.callFailed'));
           });
         },
@@ -144,7 +86,7 @@ function PatientHomeScreen() {
             vibrateIfEnabled([0, 200, 100, 200]);
             Alert.alert(
               t('patientHome.sosSentTitle'),
-              t('patientHome.sosSentMessage', { name: CARETAKER_NAME }),
+              t('patientHome.sosSentMessage', { name: CARETAKER.name }),
             );
           },
         },
@@ -164,7 +106,7 @@ function PatientHomeScreen() {
     vibrateIfEnabled(20);
     Alert.alert(
       appointment.doctorName,
-      `${appointment.specialty} · ${appointment.dateTime}`,
+      `${appointment.specialty} · ${appointment.date} · ${appointment.time}`,
       [
         { text: t('patientHome.close'), style: 'cancel' },
         {
@@ -204,11 +146,13 @@ function PatientHomeScreen() {
       <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <View style={styles.userInfo}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarLabel}>A</Text>
+            <Text style={styles.avatarLabel}>
+              {CURRENT_PATIENT.avatarInitial}
+            </Text>
           </View>
           <View>
             <Text style={[styles.userName, { color: textColor }]}>
-              Anita Devi
+              {CURRENT_PATIENT.name}
             </Text>
             <Text style={[styles.userRole, { color: subTextColor }]}>
               {t('roleSelection.patient')}
@@ -224,17 +168,19 @@ function PatientHomeScreen() {
               styles.iconButton,
               { backgroundColor: cardColor },
               pressed && styles.pressed,
-            ]}>
+            ]}
+          >
             <Text style={styles.iconGlyph}>📞</Text>
           </Pressable>
           <Pressable
             accessibilityLabel={t('patientHome.settings')}
-            onPress={() => navigation.navigate('PatientSettings')}
+            onPress={() => navigation.navigate('Settings')}
             style={({ pressed }) => [
               styles.iconButton,
               { backgroundColor: cardColor },
               pressed && styles.pressed,
-            ]}>
+            ]}
+          >
             <Text style={styles.iconGlyph}>⚙️</Text>
           </Pressable>
           <Pressable
@@ -243,7 +189,8 @@ function PatientHomeScreen() {
             style={({ pressed }) => [
               styles.sosButton,
               pressed && styles.pressed,
-            ]}>
+            ]}
+          >
             <Text style={styles.sosLabel}>{t('patientHome.sos')}</Text>
           </Pressable>
         </View>
@@ -255,14 +202,16 @@ function PatientHomeScreen() {
           styles.scrollContent,
           { paddingBottom: insets.bottom + 24 },
         ]}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+      >
         <Pressable
           onPress={handleStreakPress}
           style={({ pressed }) => [
             styles.streakCard,
             { backgroundColor: cardColor },
             pressed && styles.pressed,
-          ]}>
+          ]}
+        >
           <Text style={styles.streakGlyph}>🔥</Text>
           <View>
             <Text style={[styles.streakCount, { color: textColor }]}>
@@ -285,7 +234,8 @@ function PatientHomeScreen() {
               style={[
                 styles.reminderRow,
                 index === reminders.length - 1 && styles.reminderRowLast,
-              ]}>
+              ]}
+            >
               <Text style={styles.reminderIcon}>{reminder.icon}</Text>
               <View style={styles.reminderTextGroup}>
                 <Text
@@ -293,19 +243,19 @@ function PatientHomeScreen() {
                     styles.reminderLabel,
                     { color: textColor },
                     reminder.done && styles.reminderLabelDone,
-                  ]}>
-                  {t(`patientHome.reminders.${reminder.labelKey}`)}
+                  ]}
+                >
+                  {reminder.name}
                 </Text>
-                <Text
-                  style={[styles.reminderTime, { color: subTextColor }]}>
-                  {reminder.time}
+                <Text style={[styles.reminderTime, { color: subTextColor }]}>
+                  {reminder.dosage
+                    ? `${reminder.time} · ${reminder.dosage}`
+                    : reminder.time}
                 </Text>
               </View>
               <View
-                style={[
-                  styles.checkbox,
-                  reminder.done && styles.checkboxDone,
-                ]}>
+                style={[styles.checkbox, reminder.done && styles.checkboxDone]}
+              >
                 {reminder.done && <Text style={styles.checkmark}>✓</Text>}
               </View>
             </Pressable>
@@ -316,29 +266,37 @@ function PatientHomeScreen() {
           {t('patientHome.appointmentsTitle')}
         </SectionTitle>
         <View style={[styles.card, { backgroundColor: cardColor }]}>
-          {APPOINTMENTS.map((appointment, index) => (
-            <Pressable
-              key={appointment.id}
-              onPress={() => handleAppointmentPress(appointment)}
-              style={({ pressed }) => [
-                styles.appointmentRow,
-                index === APPOINTMENTS.length - 1 &&
-                  styles.appointmentRowLast,
-                pressed && styles.pressed,
-              ]}>
-              <View style={styles.appointmentGlyphWrap}>
-                <Text style={styles.appointmentGlyph}>🗓️</Text>
-              </View>
-              <View style={styles.reminderTextGroup}>
-                <Text style={[styles.reminderLabel, { color: textColor }]}>
-                  {appointment.doctorName}
-                </Text>
-                <Text style={[styles.reminderTime, { color: subTextColor }]}>
-                  {appointment.specialty} · {appointment.dateTime}
-                </Text>
-              </View>
-            </Pressable>
-          ))}
+          {appointments.length === 0 ? (
+            <Text style={[styles.emptyText, { color: subTextColor }]}>
+              {t('patientHome.noAppointments')}
+            </Text>
+          ) : (
+            appointments.map((appointment, index) => (
+              <Pressable
+                key={appointment.id}
+                onPress={() => handleAppointmentPress(appointment)}
+                style={({ pressed }) => [
+                  styles.appointmentRow,
+                  index === appointments.length - 1 &&
+                    styles.appointmentRowLast,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <View style={styles.appointmentGlyphWrap}>
+                  <Text style={styles.appointmentGlyph}>🗓️</Text>
+                </View>
+                <View style={styles.reminderTextGroup}>
+                  <Text style={[styles.reminderLabel, { color: textColor }]}>
+                    {appointment.doctorName}
+                  </Text>
+                  <Text style={[styles.reminderTime, { color: subTextColor }]}>
+                    {appointment.specialty} · {appointment.date} ·{' '}
+                    {appointment.time}
+                  </Text>
+                </View>
+              </Pressable>
+            ))
+          )}
         </View>
 
         <View onLayout={handleGamesSectionLayout}>
@@ -354,22 +312,27 @@ function PatientHomeScreen() {
           />
         </View>
 
-        <View
-          style={[styles.promoCard, { backgroundColor: cardColor }]}>
+        <View style={[styles.promoCard, { backgroundColor: cardColor }]}>
           <View style={styles.promoTextGroup}>
             <Text style={[styles.promoTitle, { color: textColor }]}>
-              {t('patientHome.appointmentComingUp')}
+              {appointments.length > 0
+                ? t('patientHome.appointmentComingUp')
+                : t('patientHome.newGamePromptTitle')}
             </Text>
-            <Text style={[styles.promoSubtitle, { color: subTextColor }]}>
-              {APPOINTMENTS[0].doctorName} · {APPOINTMENTS[0].dateTime}
-            </Text>
+            {appointments.length > 0 && (
+              <Text style={[styles.promoSubtitle, { color: subTextColor }]}>
+                {appointments[0].doctorName} · {appointments[0].date} ·{' '}
+                {appointments[0].time}
+              </Text>
+            )}
           </View>
           <Pressable
             onPress={handleNewGamePress}
             style={({ pressed }) => [
               styles.newGameButton,
               pressed && styles.pressed,
-            ]}>
+            ]}
+          >
             <Text style={styles.newGameButtonLabel}>
               {t('patientHome.newGame')}
             </Text>
@@ -387,9 +350,7 @@ function SectionTitle({
   children: ReactNode;
   color: string;
 }) {
-  return (
-    <Text style={[styles.sectionTitle, { color }]}>{children}</Text>
-  );
+  return <Text style={[styles.sectionTitle, { color }]}>{children}</Text>;
 }
 
 function GamesGrid({
@@ -422,7 +383,8 @@ function GamesGrid({
                 styles.gameCard,
                 { backgroundColor: cardColor },
                 pressed && styles.pressed,
-              ]}>
+              ]}
+            >
               <Text style={styles.placeholderGlyph}>🎮</Text>
               <Text style={[styles.placeholderLabel, { color: textColor }]}>
                 {label}
@@ -600,6 +562,11 @@ const styles = StyleSheet.create({
   },
   appointmentGlyph: {
     fontSize: 22,
+  },
+  emptyText: {
+    fontSize: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
   },
   gamesGrid: {
     gap: 12,

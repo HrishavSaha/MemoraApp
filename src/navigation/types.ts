@@ -3,5 +3,8 @@ export type RootStackParamList = {
   Localisation: { fromSettings?: boolean } | undefined;
   RoleSelection: undefined;
   PatientHome: undefined;
-  PatientSettings: undefined;
+  CaretakerHome: undefined;
+  CaretakerCallHistory: undefined;
+  CaretakerPatientDetail: { patientId: string };
+  Settings: undefined;
 };

@@ -39,14 +39,10 @@
     "sosSentMessage": "{{name}} ক জানুওয়া হ'ল।",
     "streakDetail": "আপুনি একেৰাহে ৭ দিন আপোনার দৈনিক ৰিমাইণ্ডাৰ সম্পূর্ণ কৰিছে। এইদৰেই আগবাঢ়ি যাওক!",
     "gameComingSoonTitle": "খেল {{number}}",
-    "reminders": {
-      "water": "পানী খাওক",
-      "medicineMorning": "পুৱাৰ দৰব",
-      "medicineEvening": "সন্ধিয়াৰ দৰব",
-      "walk": "লঘু খোজকাটা"
-    }
+    "noAppointments": "কোনো আগন্তুক এপয়েন্টমেণ্ট নাই",
+    "newGamePromptTitle": "নতুন খেল চেষ্টা কৰক"
   },
-  "patientSettings": {
+  "settings": {
     "back": "পিছফাল",
     "title": "ছেটিংছ",
     "music": "সংগীত",
@@ -54,5 +50,55 @@
     "haptics": "হেপটিক্স",
     "switchLanguage": "ভাষা সলনি কৰক",
     "logout": "লগআউট"
+  },
+  "caretakerHome": {
+    "settings": "ছেটিংছ",
+    "callHistory": "কল ইতিহাস",
+    "patientsTitle": "আপোনার ৰোগীসকল",
+    "patientDetailComingSoon": "ৰোগীৰ বিৱরণ সোনকালেই আহি আছে"
+  },
+  "callHistory": {
+    "title": "কল ইতিহাস",
+    "missed": "মিছড",
+    "addNote": "+ ডাক্তৰৰ বাবে টোকা",
+    "editNote": "ডাক্তৰৰ বাবে টোকা সম্পাদনা কৰক",
+    "noteModalTitle": "ডাক্তৰৰ বাবে টোকা",
+    "noteFieldLabel": "টোকা",
+    "cancel": "বাতিল কৰক",
+    "save": "সংৰক্ষণ কৰক"
+  },
+  "caretakerPatient": {
+    "weeklyActivity": "এই সপ্তাহত {{hours}} ঘণ্টা সক্রিয়",
+    "remindersTitle": "ৰিমাইণ্ডাৰ",
+    "addTask": "+ কাম",
+    "addMedicine": "+ দৰব",
+    "appointmentsTitle": "আগন্তুক এপয়েন্টমেণ্ট",
+    "addAppointment": "+ এপয়েন্টমেণ্ট যোগ কৰক",
+    "noAppointments": "কোনো আগন্তুক এপয়েন্টমেণ্ট নাই",
+    "editAppointment": "এপয়েন্টমেণ্ট সম্পাদনা কৰক",
+    "deleteAppointment": "এপয়েন্টমেণ্ট মুছি পেলাওক",
+    "deleteAppointmentConfirmTitle": "এই এপয়েন্টমেণ্ট মুছিব নে?",
+    "deleteAppointmentConfirmMessage": "ইয়াক পূৰ্বাবস্থাত আনিব নোৱাৰি।",
+    "editReminder": "সম্পাদনা কৰক",
+    "deleteReminder": "মুছি পেলাওক",
+    "deleteReminderConfirmTitle": "এই ৰিমাইণ্ডাৰ মুছিব নে?",
+    "deleteReminderConfirmMessage": "ইয়াক পূৰ্বাবস্থাত আনিব নোৱাৰি।",
+    "delete": "মুছি পেলাওক",
+    "cancel": "বাতিল কৰক",
+    "save": "সংৰক্ষণ কৰক",
+    "addTaskTitle": "কাম যোগ কৰক",
+    "addMedicineTitle": "দৰব যোগ কৰক",
+    "editTaskTitle": "কাম সম্পাদনা কৰক",
+    "editMedicineTitle": "দৰব সম্পাদনা কৰক",
+    "editAppointmentTitle": "এপয়েন্টমেণ্ট সম্পাদনা কৰক",
+    "addAppointmentTitle": "এপয়েন্টমেণ্ট যোগ কৰক",
+    "fieldName": "নাম",
+    "fieldTime": "সময়",
+    "fieldDescription": "বিৱরণ",
+    "fieldDosage": "মাত্ৰা",
+    "fieldDoctorName": "ডাক্তৰৰ নাম",
+    "fieldSpecialty": "বিশেষত্ব",
+    "fieldDate": "তাৰিখ",
+    "validationRequired": "অনুগ্রহ কৰি প্ৰয়োজনীয় ফিল্ডসমূহ পূৰণ কৰক"
   }
 }

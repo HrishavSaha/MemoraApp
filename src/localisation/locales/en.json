@@ -39,14 +39,10 @@
     "sosSentMessage": "{{name}} has been notified.",
     "streakDetail": "You've completed your daily reminders for 7 days in a row. Keep it going!",
     "gameComingSoonTitle": "Game {{number}}",
-    "reminders": {
-      "water": "Drink Water",
-      "medicineMorning": "Morning Medicine",
-      "medicineEvening": "Evening Medicine",
-      "walk": "Light Walk"
-    }
+    "noAppointments": "No upcoming appointments",
+    "newGamePromptTitle": "Try a new game"
   },
-  "patientSettings": {
+  "settings": {
     "back": "Back",
     "title": "Settings",
     "music": "Music",
@@ -54,5 +50,55 @@
     "haptics": "Haptics",
     "switchLanguage": "Switch language",
     "logout": "Logout"
+  },
+  "caretakerHome": {
+    "settings": "Settings",
+    "callHistory": "Call history",
+    "patientsTitle": "Your Patients",
+    "patientDetailComingSoon": "Patient details coming soon"
+  },
+  "callHistory": {
+    "title": "Call History",
+    "missed": "Missed",
+    "addNote": "+ Note for doctor",
+    "editNote": "Edit note for doctor",
+    "noteModalTitle": "Note for doctor",
+    "noteFieldLabel": "Note",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "caretakerPatient": {
+    "weeklyActivity": "{{hours}}h active this week",
+    "remindersTitle": "Reminders",
+    "addTask": "+ Task",
+    "addMedicine": "+ Medicine",
+    "appointmentsTitle": "Upcoming Appointments",
+    "addAppointment": "+ Add appointment",
+    "noAppointments": "No upcoming appointments",
+    "editAppointment": "Edit appointment",
+    "deleteAppointment": "Delete appointment",
+    "deleteAppointmentConfirmTitle": "Remove this appointment?",
+    "deleteAppointmentConfirmMessage": "This can't be undone.",
+    "editReminder": "Edit",
+    "deleteReminder": "Delete",
+    "deleteReminderConfirmTitle": "Remove this reminder?",
+    "deleteReminderConfirmMessage": "This can't be undone.",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "addTaskTitle": "Add task",
+    "addMedicineTitle": "Add medicine",
+    "editTaskTitle": "Edit task",
+    "editMedicineTitle": "Edit medicine",
+    "editAppointmentTitle": "Edit appointment",
+    "addAppointmentTitle": "Add appointment",
+    "fieldName": "Name",
+    "fieldTime": "Time",
+    "fieldDescription": "Description",
+    "fieldDosage": "Dosage",
+    "fieldDoctorName": "Doctor name",
+    "fieldSpecialty": "Specialty",
+    "fieldDate": "Date",
+    "validationRequired": "Please fill in the required fields"
   }
 }

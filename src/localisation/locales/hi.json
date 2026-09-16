@@ -39,14 +39,10 @@
     "sosSentMessage": "{{name}} को सूचित कर दिया गया है।",
     "streakDetail": "आपने लगातार 7 दिनों तक अपने दैनिक रिमाइंडर पूरे किए हैं। ऐसे ही जारी रखें!",
     "gameComingSoonTitle": "खेल {{number}}",
-    "reminders": {
-      "water": "पानी पिएं",
-      "medicineMorning": "सुबह की दवा",
-      "medicineEvening": "शाम की दवा",
-      "walk": "थोड़ी सैर"
-    }
+    "noAppointments": "कोई आने वाली नियुक्ति नहीं",
+    "newGamePromptTitle": "नया खेल आज़माएं"
   },
-  "patientSettings": {
+  "settings": {
     "back": "वापस",
     "title": "सेटिंग्स",
     "music": "संगीत",
@@ -54,5 +50,55 @@
     "haptics": "हैप्टिक्स",
     "switchLanguage": "भाषा बदलें",
     "logout": "लॉगआउट"
+  },
+  "caretakerHome": {
+    "settings": "सेटिंग्स",
+    "callHistory": "कॉल इतिहास",
+    "patientsTitle": "आपके मरीज़",
+    "patientDetailComingSoon": "मरीज़ का विवरण जल्द आ रहा है"
+  },
+  "callHistory": {
+    "title": "कॉल इतिहास",
+    "missed": "मिस्ड",
+    "addNote": "+ डॉक्टर के लिए नोट",
+    "editNote": "डॉक्टर के लिए नोट संपादित करें",
+    "noteModalTitle": "डॉक्टर के लिए नोट",
+    "noteFieldLabel": "नोट",
+    "cancel": "रद्द करें",
+    "save": "सहेजें"
+  },
+  "caretakerPatient": {
+    "weeklyActivity": "इस सप्ताह {{hours}} घंटे सक्रिय",
+    "remindersTitle": "रिमाइंडर",
+    "addTask": "+ कार्य",
+    "addMedicine": "+ दवा",
+    "appointmentsTitle": "आने वाली नियुक्तियाँ",
+    "addAppointment": "+ नियुक्ति जोड़ें",
+    "noAppointments": "कोई आने वाली नियुक्ति नहीं",
+    "editAppointment": "नियुक्ति संपादित करें",
+    "deleteAppointment": "नियुक्ति हटाएं",
+    "deleteAppointmentConfirmTitle": "यह नियुक्ति हटाएं?",
+    "deleteAppointmentConfirmMessage": "इसे पूर्ववत नहीं किया जा सकता।",
+    "editReminder": "संपादित करें",
+    "deleteReminder": "हटाएं",
+    "deleteReminderConfirmTitle": "यह रिमाइंडर हटाएं?",
+    "deleteReminderConfirmMessage": "इसे पूर्ववत नहीं किया जा सकता।",
+    "delete": "हटाएं",
+    "cancel": "रद्द करें",
+    "save": "सहेजें",
+    "addTaskTitle": "कार्य जोड़ें",
+    "addMedicineTitle": "दवा जोड़ें",
+    "editTaskTitle": "कार्य संपादित करें",
+    "editMedicineTitle": "दवा संपादित करें",
+    "editAppointmentTitle": "नियुक्ति संपादित करें",
+    "addAppointmentTitle": "नियुक्ति जोड़ें",
+    "fieldName": "नाम",
+    "fieldTime": "समय",
+    "fieldDescription": "विवरण",
+    "fieldDosage": "मात्रा",
+    "fieldDoctorName": "डॉक्टर का नाम",
+    "fieldSpecialty": "विशेषज्ञता",
+    "fieldDate": "तिथि",
+    "validationRequired": "कृपया आवश्यक फ़ील्ड भरें"
   }
 }

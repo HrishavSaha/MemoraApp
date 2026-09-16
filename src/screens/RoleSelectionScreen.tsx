@@ -22,9 +22,11 @@ function RoleSelectionScreen() {
 
   const handleSelectRole = (role: Role) => {
     setSelectedRole(role);
-    // Caretaker and Doctor destinations aren't built yet — Patient is first.
+    // Doctor's destination isn't built yet.
     if (role === 'patient') {
       navigation.navigate('PatientHome');
+    } else if (role === 'caretaker') {
+      navigation.navigate('CaretakerHome');
     }
   };
 
