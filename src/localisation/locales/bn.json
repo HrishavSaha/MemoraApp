@@ -55,7 +55,9 @@
     "settings": "সেটিংস",
     "callHistory": "কল ইতিহাস",
     "patientsTitle": "আপনার রোগীরা",
-    "patientDetailComingSoon": "রোগীর বিবরণ শীঘ্রই আসছে"
+    "patientDetailComingSoon": "রোগীর বিবরণ শীঘ্রই আসছে",
+    "needsAttention": "মনোযোগ প্রয়োজন",
+    "checkIn": "চেক ইন করুন"
   },
   "callHistory": {
     "title": "কল ইতিহাস",

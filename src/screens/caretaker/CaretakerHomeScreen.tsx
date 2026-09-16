@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Pressable,
@@ -10,8 +11,28 @@ import {
   useColorScheme,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CARETAKER, PATIENTS, type MockPatient } from '../../data/mockPeople';
+import {
+  CARETAKER,
+  PATIENTS,
+  getPatientPriority,
+  sortPatientsByPriority,
+  type MockPatient,
+  type PatientPriority,
+} from '../../data/mockPeople';
 import type { RootStackParamList } from '../../navigation/types';
+
+const PRIORITY_COLORS: Record<
+  PatientPriority,
+  { solid: string; tint: string; onTint: string }
+> = {
+  high: { solid: '#D64545', tint: 'rgba(214,69,69,0.14)', onTint: '#D64545' },
+  medium: {
+    solid: '#C97A1A',
+    tint: 'rgba(201,122,26,0.14)',
+    onTint: '#C97A1A',
+  },
+  low: { solid: '#1B7A6D', tint: 'rgba(27,122,109,0.12)', onTint: '#1B7A6D' },
+};
 
 function CaretakerHomeScreen() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -21,6 +42,7 @@ function CaretakerHomeScreen() {
     useNavigation<
       NativeStackNavigationProp<RootStackParamList, 'CaretakerHome'>
     >();
+  const sortedPatients = useMemo(() => sortPatientsByPriority(PATIENTS), []);
 
   const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
   const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
@@ -56,7 +78,8 @@ function CaretakerHomeScreen() {
               styles.iconButton,
               { backgroundColor: cardColor },
               pressed && styles.pressed,
-            ]}>
+            ]}
+          >
             <Text style={styles.iconGlyph}>🕘</Text>
           </Pressable>
           <Pressable
@@ -66,7 +89,8 @@ function CaretakerHomeScreen() {
               styles.iconButton,
               { backgroundColor: cardColor },
               pressed && styles.pressed,
-            ]}>
+            ]}
+          >
             <Text style={styles.iconGlyph}>⚙️</Text>
           </Pressable>
         </View>
@@ -77,48 +101,65 @@ function CaretakerHomeScreen() {
           styles.scrollContent,
           { paddingBottom: insets.bottom + 24 },
         ]}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={[styles.sectionTitle, { color: textColor }]}>
           {t('caretakerHome.patientsTitle')}
         </Text>
 
         <View style={[styles.card, { backgroundColor: cardColor }]}>
-          {PATIENTS.map((patient, index) => (
-            <Pressable
-              key={patient.id}
-              onPress={() => handlePatientPress(patient)}
-              style={({ pressed }) => [
-                styles.patientRow,
-                index === PATIENTS.length - 1 && styles.patientRowLast,
-                pressed && styles.pressed,
-              ]}>
-              <View style={styles.patientAvatar}>
-                <Text style={styles.patientAvatarLabel}>
-                  {patient.avatarInitial}
-                </Text>
-              </View>
-              <View style={styles.patientTextGroup}>
-                <Text style={[styles.patientName, { color: textColor }]}>
-                  {patient.name}
-                </Text>
-                <Text
-                  style={[styles.patientSubtitle, { color: subTextColor }]}>
-                  {patient.condition} · {patient.lastActive}
-                </Text>
-              </View>
-              {patient.streak > 0 ? (
-                <View style={styles.streakBadge}>
-                  <Text style={styles.streakBadgeText}>
-                    🔥 {patient.streak}
+          {sortedPatients.map((patient, index) => {
+            const priority = getPatientPriority(patient);
+            const colors = PRIORITY_COLORS[priority];
+            return (
+              <Pressable
+                key={patient.id}
+                onPress={() => handlePatientPress(patient)}
+                style={({ pressed }) => [
+                  styles.patientRow,
+                  index === sortedPatients.length - 1 && styles.patientRowLast,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <View
+                  style={[
+                    styles.patientAvatar,
+                    { backgroundColor: colors.solid },
+                  ]}
+                >
+                  <Text style={styles.patientAvatarLabel}>
+                    {patient.avatarInitial}
                   </Text>
                 </View>
-              ) : (
-                <Text style={[styles.chevron, { color: subTextColor }]}>
-                  ›
-                </Text>
-              )}
-            </Pressable>
-          ))}
+                <View style={styles.patientTextGroup}>
+                  <Text style={[styles.patientName, { color: textColor }]}>
+                    {patient.name}
+                  </Text>
+                  <Text
+                    style={[styles.patientSubtitle, { color: subTextColor }]}
+                  >
+                    {patient.condition} · {patient.lastActive}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.priorityBadge,
+                    { backgroundColor: colors.tint },
+                  ]}
+                >
+                  <Text
+                    style={[styles.priorityBadgeText, { color: colors.onTint }]}
+                  >
+                    {priority === 'low'
+                      ? `🔥 ${patient.streak}`
+                      : priority === 'medium'
+                      ? t('caretakerHome.checkIn')
+                      : t('caretakerHome.needsAttention')}
+                  </Text>
+                </View>
+              </Pressable>
+            );
+          })}
         </View>
       </ScrollView>
     </View>
@@ -227,20 +268,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 2,
   },
-  streakBadge: {
-    backgroundColor: 'rgba(27,122,109,0.12)',
+  priorityBadge: {
     borderRadius: 12,
     paddingVertical: 4,
     paddingHorizontal: 10,
   },
-  streakBadgeText: {
+  priorityBadgeText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1B7A6D',
-  },
-  chevron: {
-    fontSize: 22,
-    fontWeight: '600',
   },
 });
 

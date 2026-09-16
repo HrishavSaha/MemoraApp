@@ -14,6 +14,10 @@ export type MockPatient = {
   streak: number;
   lastActive: string;
   weeklyActiveHours: number;
+  /** Days since the patient last opened the app — drives priority sorting. */
+  daysSinceActive: number;
+  /** 1 = mild/early stage, 2 = moderate, 3 = severe — drives priority sorting. */
+  severity: 1 | 2 | 3;
 };
 
 export const PATIENTS: MockPatient[] = [
@@ -25,6 +29,8 @@ export const PATIENTS: MockPatient[] = [
     streak: 7,
     lastActive: 'Active today',
     weeklyActiveHours: 9.5,
+    daysSinceActive: 0,
+    severity: 1,
   },
   {
     id: '2',
@@ -34,6 +40,8 @@ export const PATIENTS: MockPatient[] = [
     streak: 3,
     lastActive: 'Active yesterday',
     weeklyActiveHours: 4,
+    daysSinceActive: 1,
+    severity: 1,
   },
   {
     id: '3',
@@ -43,5 +51,42 @@ export const PATIENTS: MockPatient[] = [
     streak: 0,
     lastActive: 'Inactive for 2 days',
     weeklyActiveHours: 0.5,
+    daysSinceActive: 2,
+    severity: 2,
   },
 ];
+
+export type PatientPriority = 'high' | 'medium' | 'low';
+
+const PRIORITY_RANK: Record<PatientPriority, number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
+
+/**
+ * A patient needs urgent attention if they've gone quiet for 2+ days or have
+ * broken their streak entirely; a single missed day or a more advanced
+ * condition stage warrants a check-in; otherwise things look fine.
+ */
+export function getPatientPriority(patient: MockPatient): PatientPriority {
+  if (patient.daysSinceActive >= 2 || patient.streak === 0) {
+    return 'high';
+  }
+  if (patient.daysSinceActive >= 1 || patient.severity >= 2) {
+    return 'medium';
+  }
+  return 'low';
+}
+
+export function sortPatientsByPriority(patients: MockPatient[]): MockPatient[] {
+  return [...patients].sort((a, b) => {
+    const rankDiff =
+      PRIORITY_RANK[getPatientPriority(a)] -
+      PRIORITY_RANK[getPatientPriority(b)];
+    if (rankDiff !== 0) {
+      return rankDiff;
+    }
+    return b.daysSinceActive - a.daysSinceActive;
+  });
+}

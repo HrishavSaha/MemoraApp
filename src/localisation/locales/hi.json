@@ -55,7 +55,9 @@
     "settings": "सेटिंग्स",
     "callHistory": "कॉल इतिहास",
     "patientsTitle": "आपके मरीज़",
-    "patientDetailComingSoon": "मरीज़ का विवरण जल्द आ रहा है"
+    "patientDetailComingSoon": "मरीज़ का विवरण जल्द आ रहा है",
+    "needsAttention": "ध्यान देने की आवश्यकता है",
+    "checkIn": "जांच करें"
   },
   "callHistory": {
     "title": "कॉल इतिहास",

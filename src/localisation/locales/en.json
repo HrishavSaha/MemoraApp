@@ -55,7 +55,9 @@
     "settings": "Settings",
     "callHistory": "Call history",
     "patientsTitle": "Your Patients",
-    "patientDetailComingSoon": "Patient details coming soon"
+    "patientDetailComingSoon": "Patient details coming soon",
+    "needsAttention": "Needs attention",
+    "checkIn": "Check in"
   },
   "callHistory": {
     "title": "Call History",
