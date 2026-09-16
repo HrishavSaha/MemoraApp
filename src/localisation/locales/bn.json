@@ -135,12 +135,14 @@
     "adherenceTitle": "ওষুধ মান্যতা",
     "adherenceSubtitle": "সাপ্তাহিক গড়",
     "adherenceDetailTitle": "দিন-ভিত্তিক মান্যতা",
-    "gameProgressTitle": "সাপ্তাহিক গেম অগ্রগতি",
-    "legendIncrease": "উন্নতি হয়েছে",
-    "legendDecrease": "অবনতি হয়েছে",
-    "legendSame": "কোনো পরিবর্তন নেই",
     "caretakerNotesTitle": "পরিচর্যাকারীর নোট",
     "noNotes": "এখনও কোনো নোট নেই",
     "close": "বন্ধ করুন"
+  },
+  "gameProgress": {
+    "title": "সাপ্তাহিক গেম অগ্রগতি",
+    "legendIncrease": "উন্নতি হয়েছে",
+    "legendDecrease": "অবনতি হয়েছে",
+    "legendSame": "কোনো পরিবর্তন নেই"
   }
 }

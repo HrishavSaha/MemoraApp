@@ -135,12 +135,14 @@
     "adherenceTitle": "দৰব মান্যতা",
     "adherenceSubtitle": "সাপ্তাহিক গড়",
     "adherenceDetailTitle": "দিন-ভিত্তিক মান্যতা",
-    "gameProgressTitle": "সাপ্তাহিক খেল প্ৰগতি",
-    "legendIncrease": "উন্নতি হৈছে",
-    "legendDecrease": "অবনতি হৈছে",
-    "legendSame": "কোনো পৰিবৰ্তন নাই",
     "caretakerNotesTitle": "পৰিচৰ্যাকৰ্তাৰ টোকা",
     "noNotes": "এতিয়ালৈকে কোনো টোকা নাই",
     "close": "বন্ধ কৰক"
+  },
+  "gameProgress": {
+    "title": "সাপ্তাহিক খেল প্ৰগতি",
+    "legendIncrease": "উন্নতি হৈছে",
+    "legendDecrease": "অবনতি হৈছে",
+    "legendSame": "কোনো পৰিবৰ্তন নাই"
   }
 }

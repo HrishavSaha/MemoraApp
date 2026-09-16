@@ -135,12 +135,14 @@
     "adherenceTitle": "Medication Adherence",
     "adherenceSubtitle": "Weekly average",
     "adherenceDetailTitle": "Day-by-day Adherence",
-    "gameProgressTitle": "Weekly Game Progress",
-    "legendIncrease": "Improved",
-    "legendDecrease": "Declined",
-    "legendSame": "No change",
     "caretakerNotesTitle": "Caretaker Notes",
     "noNotes": "No notes yet",
     "close": "Close"
+  },
+  "gameProgress": {
+    "title": "Weekly Game Progress",
+    "legendIncrease": "Improved",
+    "legendDecrease": "Declined",
+    "legendSame": "No change"
   }
 }

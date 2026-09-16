@@ -135,12 +135,14 @@
     "adherenceTitle": "दवा अनुपालन",
     "adherenceSubtitle": "साप्ताहिक औसत",
     "adherenceDetailTitle": "दिन-वार अनुपालन",
-    "gameProgressTitle": "साप्ताहिक खेल प्रगति",
-    "legendIncrease": "सुधार हुआ",
-    "legendDecrease": "गिरावट आई",
-    "legendSame": "कोई बदलाव नहीं",
     "caretakerNotesTitle": "देखभालकर्ता के नोट्स",
     "noNotes": "अभी तक कोई नोट नहीं",
     "close": "बंद करें"
+  },
+  "gameProgress": {
+    "title": "साप्ताहिक खेल प्रगति",
+    "legendIncrease": "सुधार हुआ",
+    "legendDecrease": "गिरावट आई",
+    "legendSame": "कोई बदलाव नहीं"
   }
 }

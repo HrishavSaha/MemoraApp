@@ -20,6 +20,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { GameProgressChart } from '../../components/GameProgressChart';
 import type { Appointment } from '../../data/appointments';
 import { PATIENTS } from '../../data/mockPeople';
 import type { Reminder, ReminderType } from '../../data/reminders';
@@ -297,6 +298,8 @@ function CaretakerPatientDetailScreen() {
             ))
           )}
         </View>
+
+        <GameProgressChart patientId={patient.id} />
       </ScrollView>
 
       <ReminderFormModal
