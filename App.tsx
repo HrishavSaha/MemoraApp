@@ -10,6 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import './src/localisation/i18n';
 import { LanguageProvider } from './src/localisation/LanguageContext';
 import LocalisationScreen from './src/screens/LocalisationScreen';
+import PatientHomeScreen from './src/screens/patient/PatientHomeScreen';
 import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import type { RootStackParamList } from './src/navigation/types';
@@ -36,6 +37,7 @@ function App() {
               name="RoleSelection"
               component={RoleSelectionScreen}
             />
+            <Stack.Screen name="PatientHome" component={PatientHomeScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </LanguageProvider>

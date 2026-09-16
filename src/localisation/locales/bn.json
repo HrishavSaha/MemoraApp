@@ -13,5 +13,22 @@
     "patient": "রোগী",
     "caretaker": "পরিচর্যাকারী",
     "doctor": "ডাক্তার"
+  },
+  "patientHome": {
+    "callCaretaker": "পরিচর্যাকারীকে কল করুন",
+    "settings": "সেটিংস",
+    "streak": "{{count}} দিনের ধারা",
+    "keepItUp": "এভাবেই চালিয়ে যান!",
+    "remindersTitle": "আজকের রিমাইন্ডার",
+    "appointmentsTitle": "আসন্ন অ্যাপয়েন্টমেন্ট",
+    "gamesTitle": "গেমস",
+    "mocaTitle": "MoCA পরীক্ষা",
+    "comingSoon": "শীঘ্রই আসছে",
+    "reminders": {
+      "water": "জল পান করুন",
+      "medicineMorning": "সকালের ওষুধ",
+      "medicineEvening": "সন্ধ্যার ওষুধ",
+      "walk": "হালকা হাঁটা"
+    }
   }
 }

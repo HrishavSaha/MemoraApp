@@ -13,5 +13,22 @@
     "patient": "ৰোগী",
     "caretaker": "পৰিচৰ্যাকৰ্তা",
     "doctor": "ডাক্তৰ"
+  },
+  "patientHome": {
+    "callCaretaker": "পৰিচৰ্যাকৰ্তাক কল কৰক",
+    "settings": "ছেটিংছ",
+    "streak": "{{count}} দিনৰ ধাৰা",
+    "keepItUp": "এইদৰেই আগবাঢ়ি যাওক!",
+    "remindersTitle": "আজিৰ ৰিমাইণ্ডাৰ",
+    "appointmentsTitle": "আগন্তুক এপয়েন্টমেণ্ট",
+    "gamesTitle": "খেল",
+    "mocaTitle": "MoCA পৰীক্ষা",
+    "comingSoon": "সোনকালেই আহি আছে",
+    "reminders": {
+      "water": "পানী খাওক",
+      "medicineMorning": "পুৱাৰ দৰব",
+      "medicineEvening": "সন্ধিয়াৰ দৰব",
+      "walk": "লঘু খোজকাটা"
+    }
   }
 }

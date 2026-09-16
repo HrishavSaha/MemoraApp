@@ -2,4 +2,5 @@ export type RootStackParamList = {
   Splash: undefined;
   Localisation: undefined;
   RoleSelection: undefined;
+  PatientHome: undefined;
 };

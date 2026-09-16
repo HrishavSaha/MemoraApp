@@ -1,7 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { RootStackParamList } from '../navigation/types';
 
 type Role = 'patient' | 'caretaker' | 'doctor';
 
@@ -12,6 +15,18 @@ function RoleSelectionScreen() {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootStackParamList, 'RoleSelection'>
+    >();
+
+  const handleSelectRole = (role: Role) => {
+    setSelectedRole(role);
+    // Caretaker and Doctor destinations aren't built yet — Patient is first.
+    if (role === 'patient') {
+      navigation.navigate('PatientHome');
+    }
+  };
 
   const backgroundColor = isDarkMode ? '#0F1A24' : '#FFFFFF';
   const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
@@ -35,7 +50,7 @@ function RoleSelectionScreen() {
         return (
           <Pressable
             key={role}
-            onPress={() => setSelectedRole(role)}
+            onPress={() => handleSelectRole(role)}
             style={[
               styles.roleRow,
               {

@@ -13,5 +13,22 @@
     "patient": "Patient",
     "caretaker": "Caretaker",
     "doctor": "Doctor"
+  },
+  "patientHome": {
+    "callCaretaker": "Call caretaker",
+    "settings": "Settings",
+    "streak": "{{count}}-day streak",
+    "keepItUp": "Keep it up!",
+    "remindersTitle": "Today's Reminders",
+    "appointmentsTitle": "Upcoming Appointments",
+    "gamesTitle": "Games",
+    "mocaTitle": "MoCA Test",
+    "comingSoon": "Coming soon",
+    "reminders": {
+      "water": "Drink Water",
+      "medicineMorning": "Morning Medicine",
+      "medicineEvening": "Evening Medicine",
+      "walk": "Light Walk"
+    }
   }
 }
