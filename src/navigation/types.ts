@@ -4,6 +4,7 @@ export type RootStackParamList = {
   RoleSelection: undefined;
   PatientHome: undefined;
   TilePatternGame: undefined;
+  ObjectSortingGame: undefined;
   CaretakerHome: undefined;
   CaretakerCallHistory: undefined;
   CaretakerPatientDetail: { patientId: string };

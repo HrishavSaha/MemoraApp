@@ -158,5 +158,27 @@
     "successSubtitle": "{{seconds}} সেকেন্ডে সমাধান হয়েছে",
     "failTitle": "ঠিক হয়নি",
     "failSubtitle": "আপনি {{total}}টির মধ্যে {{matched}}টি মিলিয়েছেন। আবার চেষ্টা করুন।"
+  },
+  "objectSortingGame": {
+    "title": "বস্তু বাছাই",
+    "subtitle": "প্রতিটি বস্তুর রঙের সাথে মিলে যাওয়া পাত্রে চাপ দিন।",
+    "level": "{{objects}}টি বস্তু · {{bins}}টি পাত্র",
+    "start": "শুরু করুন",
+    "prompt": "এটি কোন পাত্রে যাবে?",
+    "progress": "{{total}}টির মধ্যে {{sorted}}টি",
+    "successTitle": "চমৎকার বাছাই!",
+    "successSubtitle": "সবগুলো {{total}}টি সঠিকভাবে বাছাই হয়েছে",
+    "failTitle": "ঠিক হয়নি",
+    "failSubtitle": "আপনি {{total}}টির মধ্যে {{sorted}}টি বাছাই করেছেন। আবার চেষ্টা করুন।",
+    "colors": {
+      "red": "লাল",
+      "blue": "নীল",
+      "green": "সবুজ",
+      "yellow": "হলুদ",
+      "purple": "বেগুনি",
+      "orange": "কমলা",
+      "pink": "গোলাপি",
+      "teal": "ফিরোজা"
+    }
   }
 }

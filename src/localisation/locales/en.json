@@ -158,5 +158,27 @@
     "successSubtitle": "Solved in {{seconds}}s",
     "failTitle": "Not quite",
     "failSubtitle": "You matched {{matched}} of {{total}}. Let's try again."
+  },
+  "objectSortingGame": {
+    "title": "Object Sorting",
+    "subtitle": "Tap the bin that matches each object's color.",
+    "level": "{{objects}} objects · {{bins}} bins",
+    "start": "Start",
+    "prompt": "Which bin does this belong in?",
+    "progress": "{{sorted}} of {{total}}",
+    "successTitle": "Well sorted!",
+    "successSubtitle": "All {{total}} sorted correctly",
+    "failTitle": "Not quite",
+    "failSubtitle": "You sorted {{sorted}} of {{total}}. Let's try again.",
+    "colors": {
+      "red": "Red",
+      "blue": "Blue",
+      "green": "Green",
+      "yellow": "Yellow",
+      "purple": "Purple",
+      "orange": "Orange",
+      "pink": "Pink",
+      "teal": "Teal"
+    }
   }
 }

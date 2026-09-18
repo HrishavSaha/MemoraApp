@@ -158,5 +158,27 @@
     "successSubtitle": "{{seconds}} सेकंड में हल किया",
     "failTitle": "फिर से कोशिश करें",
     "failSubtitle": "आपने {{total}} में से {{matched}} सही किए। फिर से कोशिश करें।"
+  },
+  "objectSortingGame": {
+    "title": "वस्तु छँटाई",
+    "subtitle": "हर वस्तु के रंग से मेल खाने वाले डिब्बे पर दबाएँ।",
+    "level": "{{objects}} वस्तुएँ · {{bins}} डिब्बे",
+    "start": "शुरू करें",
+    "prompt": "यह किस डिब्बे में जाएगी?",
+    "progress": "{{total}} में से {{sorted}}",
+    "successTitle": "बहुत बढ़िया!",
+    "successSubtitle": "सभी {{total}} सही छाँटी गईं",
+    "failTitle": "फिर से कोशिश करें",
+    "failSubtitle": "आपने {{total}} में से {{sorted}} सही छाँटीं। फिर से कोशिश करें।",
+    "colors": {
+      "red": "लाल",
+      "blue": "नीला",
+      "green": "हरा",
+      "yellow": "पीला",
+      "purple": "बैंगनी",
+      "orange": "नारंगी",
+      "pink": "गुलाबी",
+      "teal": "फ़िरोज़ी"
+    }
   }
 }

@@ -158,5 +158,27 @@
     "successSubtitle": "{{seconds}} ছেকেণ্ডত সমাধান কৰিলে",
     "failTitle": "নহ'ল",
     "failSubtitle": "আপুনি {{total}}টাৰ ভিতৰত {{matched}}টা মিলাইছে। আকৌ চেষ্টা কৰক।"
+  },
+  "objectSortingGame": {
+    "title": "বস্তু সজোৱা",
+    "subtitle": "প্ৰতিটো বস্তুৰ ৰঙৰ সৈতে মিল থকা বিনটোত টিপক।",
+    "level": "{{objects}}টা বস্তু · {{bins}}টা বিন",
+    "start": "আৰম্ভ কৰক",
+    "prompt": "এইটো কোন বিনত যাব?",
+    "progress": "{{total}}টাৰ ভিতৰত {{sorted}}টা",
+    "successTitle": "বহুত ভাল সজালে!",
+    "successSubtitle": "সকলো {{total}}টা শুদ্ধভাৱে সজালে",
+    "failTitle": "নহ'ল",
+    "failSubtitle": "আপুনি {{total}}টাৰ ভিতৰত {{sorted}}টা সজাইছে। আকৌ চেষ্টা কৰক।",
+    "colors": {
+      "red": "ৰঙা",
+      "blue": "নীলা",
+      "green": "সেউজীয়া",
+      "yellow": "হালধীয়া",
+      "purple": "বেঙুনীয়া",
+      "orange": "কমলা",
+      "pink": "গোলাপী",
+      "teal": "ফিৰোজা"
+    }
   }
 }

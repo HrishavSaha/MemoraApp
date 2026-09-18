@@ -15,6 +15,7 @@ import CaretakerPatientDetailScreen from './src/screens/caretaker/CaretakerPatie
 import DoctorHomeScreen from './src/screens/doctor/DoctorHomeScreen';
 import DoctorPastAppointmentsScreen from './src/screens/doctor/DoctorPastAppointmentsScreen';
 import DoctorPatientDetailScreen from './src/screens/doctor/DoctorPatientDetailScreen';
+import ObjectSortingGameScreen from './src/screens/games/ObjectSortingGameScreen';
 import TilePatternGameScreen from './src/screens/games/TilePatternGameScreen';
 import LocalisationScreen from './src/screens/LocalisationScreen';
 import PatientHomeScreen from './src/screens/patient/PatientHomeScreen';
@@ -47,6 +48,10 @@ function App() {
             <Stack.Screen
               name="TilePatternGame"
               component={TilePatternGameScreen}
+            />
+            <Stack.Screen
+              name="ObjectSortingGame"
+              component={ObjectSortingGameScreen}
             />
             <Stack.Screen
               name="CaretakerHome"
