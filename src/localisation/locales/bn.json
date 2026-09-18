@@ -145,5 +145,18 @@
     "legendIncrease": "উন্নতি হয়েছে",
     "legendDecrease": "অবনতি হয়েছে",
     "legendSame": "কোনো পরিবর্তন নেই"
+  },
+  "tilePatternGame": {
+    "title": "টাইল প্যাটার্ন",
+    "subtitle": "টাইলগুলো জ্বলে উঠতে দেখুন, তারপর একই ক্রমে সেগুলোতে চাপ দিন।",
+    "level": "{{size}}×{{size}} গ্রিড · {{length}}টি টাইল",
+    "start": "শুরু করুন",
+    "watchPrompt": "মনোযোগ দিয়ে দেখুন…",
+    "repeatPrompt": "এখন প্যাটার্নটি পুনরাবৃত্তি করুন",
+    "progress": "{{total}}টির মধ্যে {{matched}}টি",
+    "successTitle": "চমৎকার!",
+    "successSubtitle": "{{seconds}} সেকেন্ডে সমাধান হয়েছে",
+    "failTitle": "ঠিক হয়নি",
+    "failSubtitle": "আপনি {{total}}টির মধ্যে {{matched}}টি মিলিয়েছেন। আবার চেষ্টা করুন।"
   }
 }

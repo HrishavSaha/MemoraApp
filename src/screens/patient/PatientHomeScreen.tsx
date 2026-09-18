@@ -124,6 +124,10 @@ function PatientHomeScreen() {
 
   const handleGamePress = (index: number) => {
     vibrateIfEnabled(20);
+    if (index === 0) {
+      navigation.navigate('TilePatternGame');
+      return;
+    }
     Alert.alert(
       t('patientHome.gameComingSoonTitle', { number: index + 1 }),
       t('patientHome.comingSoon'),
@@ -307,6 +311,8 @@ function PatientHomeScreen() {
             count={GAME_PLACEHOLDER_COUNT}
             cardColor={cardColor}
             textColor={subTextColor}
+            availableTextColor={textColor}
+            availableLabel={t('tilePatternGame.title')}
             label={t('patientHome.comingSoon')}
             onPressGame={handleGamePress}
           />
@@ -357,12 +363,16 @@ function GamesGrid({
   count,
   cardColor,
   textColor,
+  availableTextColor,
+  availableLabel,
   label,
   onPressGame,
 }: {
   count: number;
   cardColor: string;
   textColor: string;
+  availableTextColor: string;
+  availableLabel: string;
   label: string;
   onPressGame: (index: number) => void;
 }) {
@@ -375,22 +385,33 @@ function GamesGrid({
     <View style={styles.gamesGrid}>
       {rows.map(row => (
         <View key={row[0]} style={styles.gamesRow}>
-          {row.map(index => (
-            <Pressable
-              key={index}
-              onPress={() => onPressGame(index)}
-              style={({ pressed }) => [
-                styles.gameCard,
-                { backgroundColor: cardColor },
-                pressed && styles.pressed,
-              ]}
-            >
-              <Text style={styles.placeholderGlyph}>🎮</Text>
-              <Text style={[styles.placeholderLabel, { color: textColor }]}>
-                {label}
-              </Text>
-            </Pressable>
-          ))}
+          {row.map(index => {
+            const isAvailable = index === 0;
+            return (
+              <Pressable
+                key={index}
+                onPress={() => onPressGame(index)}
+                style={({ pressed }) => [
+                  styles.gameCard,
+                  isAvailable && styles.gameCardAvailable,
+                  { backgroundColor: cardColor },
+                  pressed && styles.pressed,
+                ]}
+              >
+                <Text style={styles.placeholderGlyph}>
+                  {isAvailable ? '🧩' : '🎮'}
+                </Text>
+                <Text
+                  style={[
+                    styles.placeholderLabel,
+                    { color: isAvailable ? availableTextColor : textColor },
+                  ]}
+                >
+                  {isAvailable ? availableLabel : label}
+                </Text>
+              </Pressable>
+            );
+          })}
         </View>
       ))}
     </View>
@@ -585,6 +606,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
+  },
+  gameCardAvailable: {
+    borderStyle: 'solid',
   },
   placeholderGlyph: {
     fontSize: 28,

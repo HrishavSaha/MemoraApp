@@ -3,6 +3,7 @@ export type RootStackParamList = {
   Localisation: { fromSettings?: boolean } | undefined;
   RoleSelection: undefined;
   PatientHome: undefined;
+  TilePatternGame: undefined;
   CaretakerHome: undefined;
   CaretakerCallHistory: undefined;
   CaretakerPatientDetail: { patientId: string };

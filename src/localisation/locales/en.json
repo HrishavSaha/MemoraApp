@@ -145,5 +145,18 @@
     "legendIncrease": "Improved",
     "legendDecrease": "Declined",
     "legendSame": "No change"
+  },
+  "tilePatternGame": {
+    "title": "Tile Pattern",
+    "subtitle": "Watch the tiles light up, then tap them back in the same order.",
+    "level": "{{size}}×{{size}} grid · {{length}} tiles",
+    "start": "Start",
+    "watchPrompt": "Watch carefully…",
+    "repeatPrompt": "Now repeat the pattern",
+    "progress": "{{matched}} of {{total}}",
+    "successTitle": "Well done!",
+    "successSubtitle": "Solved in {{seconds}}s",
+    "failTitle": "Not quite",
+    "failSubtitle": "You matched {{matched}} of {{total}}. Let's try again."
   }
 }

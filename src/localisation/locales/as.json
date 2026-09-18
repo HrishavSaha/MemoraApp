@@ -145,5 +145,18 @@
     "legendIncrease": "উন্নতি হৈছে",
     "legendDecrease": "অবনতি হৈছে",
     "legendSame": "কোনো পৰিবৰ্তন নাই"
+  },
+  "tilePatternGame": {
+    "title": "টাইল পেটাৰ্ন",
+    "subtitle": "টাইলবোৰ জিলিকি উঠা চাওক, তাৰপাছত একে ক্ৰমত সেইবোৰত টিপক।",
+    "level": "{{size}}×{{size}} গ্ৰিড · {{length}}টা টাইল",
+    "start": "আৰম্ভ কৰক",
+    "watchPrompt": "মনোযোগেৰে চাওক…",
+    "repeatPrompt": "এতিয়া পেটাৰ্নটো দুহৰাওক",
+    "progress": "{{total}}টাৰ ভিতৰত {{matched}}টা",
+    "successTitle": "বহুত ভাল!",
+    "successSubtitle": "{{seconds}} ছেকেণ্ডত সমাধান কৰিলে",
+    "failTitle": "নহ'ল",
+    "failSubtitle": "আপুনি {{total}}টাৰ ভিতৰত {{matched}}টা মিলাইছে। আকৌ চেষ্টা কৰক।"
   }
 }

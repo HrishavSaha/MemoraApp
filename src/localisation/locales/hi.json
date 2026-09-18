@@ -145,5 +145,18 @@
     "legendIncrease": "सुधार हुआ",
     "legendDecrease": "गिरावट आई",
     "legendSame": "कोई बदलाव नहीं"
+  },
+  "tilePatternGame": {
+    "title": "टाइल पैटर्न",
+    "subtitle": "टाइलों को जलते हुए देखें, फिर उसी क्रम में उन्हें दबाएँ।",
+    "level": "{{size}}×{{size}} ग्रिड · {{length}} टाइलें",
+    "start": "शुरू करें",
+    "watchPrompt": "ध्यान से देखें…",
+    "repeatPrompt": "अब पैटर्न दोहराएँ",
+    "progress": "{{total}} में से {{matched}}",
+    "successTitle": "शाबाश!",
+    "successSubtitle": "{{seconds}} सेकंड में हल किया",
+    "failTitle": "फिर से कोशिश करें",
+    "failSubtitle": "आपने {{total}} में से {{matched}} सही किए। फिर से कोशिश करें।"
   }
 }
