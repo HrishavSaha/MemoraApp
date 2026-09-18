@@ -6,16 +6,10 @@ import {
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../localisation/LanguageContext';
+import { palette, useThemeColors } from '../theme/colors';
 import type { RootStackParamList } from '../navigation/types';
 
 type Language = {
@@ -44,7 +38,8 @@ const LANGUAGES: Language[] = [
 ];
 
 function LocalisationScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const { background, text, subtext, primary, border, selected } =
+    useThemeColors();
   const insets = useSafeAreaInsets();
   const { t, i18n } = useTranslation();
   const { language, setLanguage } = useLanguage();
@@ -65,20 +60,17 @@ function LocalisationScreen() {
 
   const headerT = i18n.getFixedT(HEADER_CYCLE_LANGUAGES[cycleIndex]);
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
-
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor, paddingTop: insets.top + 24 },
-      ]}>
-      <Text style={[styles.title, { color: textColor }]}>
+        { backgroundColor: background, paddingTop: insets.top + 24 },
+      ]}
+    >
+      <Text style={[styles.title, { color: text }]}>
         {headerT('localisation.title')}
       </Text>
-      <Text style={[styles.subtitle, { color: subTextColor }]}>
+      <Text style={[styles.subtitle, { color: subtext }]}>
         {headerT('localisation.subtitle')}
       </Text>
 
@@ -95,18 +87,15 @@ function LocalisationScreen() {
               style={[
                 styles.languageRow,
                 {
-                  borderColor: isSelected ? '#1B7A6D' : '#DDE7E7',
-                  backgroundColor: isSelected
-                    ? isDarkMode
-                      ? '#123832'
-                      : '#EAF6F3'
-                    : 'transparent',
+                  borderColor: isSelected ? primary : border,
+                  backgroundColor: isSelected ? selected : 'transparent',
                 },
-              ]}>
-              <Text style={[styles.languageName, { color: textColor }]}>
+              ]}
+            >
+              <Text style={[styles.languageName, { color: text }]}>
                 {item.nativeName}
               </Text>
-              <Text style={[styles.languageSubName, { color: subTextColor }]}>
+              <Text style={[styles.languageSubName, { color: subtext }]}>
                 {item.englishName}
               </Text>
             </Pressable>
@@ -120,7 +109,8 @@ function LocalisationScreen() {
           fromSettings
             ? navigation.goBack()
             : navigation.navigate('RoleSelection')
-        }>
+        }
+      >
         <Text style={styles.nextButtonLabel}>
           {fromSettings ? t('localisation.change') : t('localisation.next')}
         </Text>
@@ -165,7 +155,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   nextButton: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',

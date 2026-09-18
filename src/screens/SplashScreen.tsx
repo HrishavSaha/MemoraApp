@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View, useColorScheme } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useThemeColors } from '../theme/colors';
 import type { RootStackParamList } from '../navigation/types';
 
 const SPLASH_DURATION_MS = 2500;
@@ -9,7 +10,7 @@ const SPLASH_DURATION_MS = 2500;
 type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
 function SplashScreen({ navigation }: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
+  const { background, text, subtext } = useThemeColors();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -21,16 +22,9 @@ function SplashScreen({ navigation }: Props) {
   }, [navigation]);
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: isDarkMode ? '#0F1A24' : '#EAF4F4' },
-      ]}>
-      <Text style={[styles.title, { color: isDarkMode ? '#FFFFFF' : '#1B4B4B' }]}>
-        Memora
-      </Text>
-      <Text
-        style={[styles.tagline, { color: isDarkMode ? '#B8CFCF' : '#3E6E6E' }]}>
+    <View style={[styles.container, { backgroundColor: background }]}>
+      <Text style={[styles.title, { color: text }]}>Memora</Text>
+      <Text style={[styles.tagline, { color: subtext }]}>
         {t('splash.tagline')}
       </Text>
     </View>

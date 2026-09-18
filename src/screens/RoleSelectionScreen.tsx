@@ -2,14 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useThemeColors } from '../theme/colors';
 import type { RootStackParamList } from '../navigation/types';
 
 type Role = 'patient' | 'caretaker' | 'doctor';
@@ -17,7 +12,8 @@ type Role = 'patient' | 'caretaker' | 'doctor';
 const ROLES: Role[] = ['patient', 'caretaker', 'doctor'];
 
 function RoleSelectionScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const { background, text, subtext, primary, border, selected } =
+    useThemeColors();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
@@ -37,21 +33,17 @@ function RoleSelectionScreen() {
     }
   };
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
-
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor, paddingTop: insets.top + 24 },
+        { backgroundColor: background, paddingTop: insets.top + 24 },
       ]}
     >
-      <Text style={[styles.title, { color: textColor }]}>
+      <Text style={[styles.title, { color: text }]}>
         {t('roleSelection.title')}
       </Text>
-      <Text style={[styles.subtitle, { color: subTextColor }]}>
+      <Text style={[styles.subtitle, { color: subtext }]}>
         {t('roleSelection.subtitle')}
       </Text>
 
@@ -64,16 +56,12 @@ function RoleSelectionScreen() {
             style={[
               styles.roleRow,
               {
-                borderColor: isSelected ? '#1B7A6D' : '#DDE7E7',
-                backgroundColor: isSelected
-                  ? isDarkMode
-                    ? '#123832'
-                    : '#EAF6F3'
-                  : 'transparent',
+                borderColor: isSelected ? primary : border,
+                backgroundColor: isSelected ? selected : 'transparent',
               },
             ]}
           >
-            <Text style={[styles.roleLabel, { color: textColor }]}>
+            <Text style={[styles.roleLabel, { color: text }]}>
               {t(`roleSelection.${role}`)}
             </Text>
           </Pressable>

@@ -4,16 +4,18 @@ import {
   type RouteProp,
 } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
-  useColorScheme,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GameProgressChart } from '../../components/GameProgressChart';
@@ -30,13 +32,15 @@ import {
   type MocaDomain,
 } from '../../data/mocaAssessments';
 import { readCallNotes } from '../../data/callNotes';
+import { useCaretakerPatientNotes } from '../../hooks/useCaretakerPatientNotes';
+import { useDoctorNotes } from '../../hooks/useDoctorNotes';
+import { palette, useThemeColors } from '../../theme/colors';
 import { parseAppointmentDateTime } from '../../utils/appointmentDate';
 import type { RootStackParamList } from '../../navigation/types';
 
 const MOCA_BAR_MAX_HEIGHT = 64;
 
 function DoctorPatientDetailScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -49,12 +53,21 @@ function DoctorPatientDetailScreen() {
 
   const [mocaModalVisible, setMocaModalVisible] = useState(false);
   const [adherenceModalVisible, setAdherenceModalVisible] = useState(false);
+  const [editingNoteToCaretaker, setEditingNoteToCaretaker] = useState(false);
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
-  const mutedBarColor = isDarkMode ? '#3A4C55' : '#D7E2E2';
+  const { notes: notesFromCaretaker } = useCaretakerPatientNotes();
+  const { notes: notesToCaretaker, setNote: setNoteToCaretaker } =
+    useDoctorNotes();
+
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    muted: mutedBarColor,
+    border,
+    primaryTint,
+  } = useThemeColors();
 
   const nextAppointment = useMemo(() => {
     if (!patient) {
@@ -88,6 +101,9 @@ function DoctorPatientDetailScreen() {
   if (!patient) {
     return null;
   }
+
+  const noteFromCaretaker = notesFromCaretaker[patient.id];
+  const noteToCaretaker = notesToCaretaker[patient.id];
 
   return (
     <View style={[styles.screen, { backgroundColor }]}>
@@ -217,7 +233,7 @@ function DoctorPatientDetailScreen() {
             <Text style={[styles.legendLabel, { color: subTextColor }]}>
               {t('doctorPatient.mocaLegendPrevious')}
             </Text>
-            <LegendDot color="#1B7A6D" />
+            <LegendDot color={palette.primary} />
             <Text style={[styles.legendLabel, { color: subTextColor }]}>
               {t('doctorPatient.mocaLegendLatest')}
             </Text>
@@ -243,8 +259,56 @@ function DoctorPatientDetailScreen() {
           </Text>
         </Pressable>
 
-        {/* Weekly game progress */}
-        <GameProgressChart patientId={patient.id} />
+        {/* Game progress, last 4 weeks */}
+        <GameProgressChart patientId={patient.id} period="weekly" />
+
+        {/* Caretaker's general note for this patient */}
+        {/* <Text style={[styles.sectionTitle, { color: textColor }]}>
+          {t('doctorPatient.noteFromCaretakerTitle')}
+        </Text>
+        <View style={[styles.card, { backgroundColor: cardColor }]}>
+          {noteFromCaretaker ? (
+            <Text style={[styles.noteCardText, { color: textColor }]}>
+              {noteFromCaretaker}
+            </Text>
+          ) : (
+            <Text style={[styles.emptyText, { color: subTextColor }]}>
+              {t('doctorPatient.noNoteFromCaretaker')}
+            </Text>
+          )}
+        </View> */}
+
+        {/* Doctor's note for the caretaker */}
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.sectionTitle, { color: textColor }]}>
+            {t('doctorPatient.noteToCaretakerTitle')}
+          </Text>
+          <Pressable
+            onPress={() => setEditingNoteToCaretaker(true)}
+            style={({ pressed }) => [
+              styles.addChip,
+              { backgroundColor: primaryTint },
+              pressed && styles.pressed,
+            ]}
+          >
+            <Text style={styles.addChipLabel}>
+              {noteToCaretaker
+                ? t('doctorPatient.editNoteToCaretaker')
+                : t('doctorPatient.addNoteToCaretaker')}
+            </Text>
+          </Pressable>
+        </View>
+        <View style={[styles.card, { backgroundColor: cardColor }]}>
+          {noteToCaretaker ? (
+            <Text style={[styles.noteCardText, { color: textColor }]}>
+              {noteToCaretaker}
+            </Text>
+          ) : (
+            <Text style={[styles.emptyText, { color: subTextColor }]}>
+              {t('doctorPatient.noNoteToCaretaker')}
+            </Text>
+          )}
+        </View>
 
         {/* Caretaker notes */}
         <Text style={[styles.sectionTitle, { color: textColor }]}>
@@ -261,6 +325,7 @@ function DoctorPatientDetailScreen() {
                 key={`${entry.dateTime}-${index}`}
                 style={[
                   styles.noteRow,
+                  { borderBottomColor: border },
                   index === patientNotes.length - 1 && styles.rowLast,
                 ]}
               >
@@ -293,7 +358,106 @@ function DoctorPatientDetailScreen() {
         onClose={() => setAdherenceModalVisible(false)}
         days={weeklyAdherence}
       />
+
+      <NoteToCaretakerModal
+        visible={editingNoteToCaretaker}
+        initialNote={noteToCaretaker}
+        onClose={() => setEditingNoteToCaretaker(false)}
+        onSubmit={value => {
+          setNoteToCaretaker(patient.id, value);
+          setEditingNoteToCaretaker(false);
+        }}
+      />
     </View>
+  );
+}
+
+function NoteToCaretakerModal({
+  visible,
+  initialNote,
+  onClose,
+  onSubmit,
+}: {
+  visible: boolean;
+  initialNote?: string;
+  onClose: () => void;
+  onSubmit: (note: string) => void;
+}) {
+  const { t } = useTranslation();
+  const [note, setNoteText] = useState('');
+
+  useEffect(() => {
+    if (visible) {
+      setNoteText(initialNote ?? '');
+    }
+  }, [visible, initialNote]);
+
+  const {
+    background: inputBackground,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    overlay,
+  } = useThemeColors();
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={[styles.modalOverlay, { backgroundColor: overlay }]}
+      >
+        <View style={[styles.modalCard, { backgroundColor: cardColor }]}>
+          <Text style={[styles.modalTitle, { color: textColor }]}>
+            {t('doctorPatient.noteToCaretakerModalTitle')}
+          </Text>
+
+          <Text style={[styles.formLabel, { color: subTextColor }]}>
+            {t('doctorPatient.noteFieldLabel')}
+          </Text>
+          <TextInput
+            value={note}
+            onChangeText={setNoteText}
+            multiline
+            style={[
+              styles.formInput,
+              styles.formInputMultiline,
+              { backgroundColor: inputBackground, color: textColor },
+            ]}
+          />
+
+          <View style={styles.modalActions}>
+            <Pressable
+              onPress={onClose}
+              style={({ pressed }) => [
+                styles.formButton,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Text style={[styles.formButtonLabel, { color: subTextColor }]}>
+                {t('doctorPatient.cancel')}
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => onSubmit(note.trim())}
+              style={({ pressed }) => [
+                styles.formButton,
+                styles.modalButtonPrimary,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Text style={styles.modalButtonPrimaryLabel}>
+                {t('doctorPatient.save')}
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </Modal>
   );
 }
 
@@ -313,10 +477,12 @@ function MocaDetailModal({
   latest?: MocaAssessment;
 }) {
   const { t } = useTranslation();
-  const isDarkMode = useColorScheme() === 'dark';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
+  const {
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    overlay,
+  } = useThemeColors();
 
   const renderAssessment = (
     label: string,
@@ -370,7 +536,7 @@ function MocaDetailModal({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
+      <View style={[styles.modalOverlay, { backgroundColor: overlay }]}>
         <View style={[styles.modalCard, { backgroundColor: cardColor }]}>
           <Text style={[styles.modalTitle, { color: textColor }]}>
             {t('doctorPatient.mocaDetailTitle')}
@@ -407,10 +573,13 @@ function AdherenceDetailModal({
   days: { day: string; percentage: number }[];
 }) {
   const { t } = useTranslation();
-  const isDarkMode = useColorScheme() === 'dark';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
+  const {
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    border,
+    overlay,
+  } = useThemeColors();
 
   return (
     <Modal
@@ -419,14 +588,20 @@ function AdherenceDetailModal({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
+      <View style={[styles.modalOverlay, { backgroundColor: overlay }]}>
         <View style={[styles.modalCard, { backgroundColor: cardColor }]}>
           <Text style={[styles.modalTitle, { color: textColor }]}>
             {t('doctorPatient.adherenceDetailTitle')}
           </Text>
           <ScrollView>
             {days.map(entry => (
-              <View key={entry.day} style={styles.adherenceDetailRow}>
+              <View
+                key={entry.day}
+                style={[
+                  styles.adherenceDetailRow,
+                  { borderBottomColor: border },
+                ]}
+              >
                 <Text style={[styles.modalRow, { color: textColor }]}>
                   {entry.day}
                 </Text>
@@ -495,9 +670,31 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  addChip: {
+    borderRadius: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+  },
+  addChipLabel: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: palette.primary,
+  },
   card: {
     borderRadius: 16,
     overflow: 'hidden',
+  },
+  noteCardText: {
+    fontSize: 14,
+    lineHeight: 20,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
   },
   reminderTextGroup: {
     flex: 1,
@@ -545,7 +742,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   mocaBarLatest: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
   },
   mocaDomainLabel: {
     fontSize: 10,
@@ -575,7 +772,7 @@ const styles = StyleSheet.create({
   adherencePercentage: {
     fontSize: 34,
     fontWeight: '800',
-    color: '#1B7A6D',
+    color: palette.primary,
   },
   emptyText: {
     fontSize: 14,
@@ -589,7 +786,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
   },
   rowLast: {
     borderBottomWidth: 0,
@@ -604,7 +800,6 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -642,7 +837,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 6,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.15)',
   },
   modalButton: {
     paddingVertical: 10,
@@ -652,12 +846,42 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   modalButtonPrimary: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
   },
   modalButtonPrimaryLabel: {
     fontSize: 15,
     fontWeight: '700',
     color: '#FFFFFF',
+  },
+  formLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 6,
+  },
+  formInput: {
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    fontSize: 15,
+  },
+  formInputMultiline: {
+    minHeight: 90,
+    textAlignVertical: 'top',
+  },
+  modalActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 10,
+    marginTop: 14,
+  },
+  formButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+  },
+  formButtonLabel: {
+    fontSize: 15,
+    fontWeight: '600',
   },
 });
 

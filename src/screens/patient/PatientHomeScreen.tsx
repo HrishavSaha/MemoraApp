@@ -1,9 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useRef, type ComponentRef, type ReactNode } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ComponentRef,
+  type ReactNode,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
+  Image,
   Linking,
   Pressable,
   ScrollView,
@@ -11,16 +18,19 @@ import {
   Text,
   Vibration,
   View,
-  useColorScheme,
   type LayoutChangeEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { REMI_IMAGES, RemiMascot } from '../../components/RemiMascot';
 import type { Appointment } from '../../data/appointments';
 import { CARETAKER, PATIENTS } from '../../data/mockPeople';
 import { useAppointments } from '../../hooks/useAppointments';
 import { useReminders } from '../../hooks/useReminders';
 import { isHapticsEnabled } from '../../settings/preferenceKeys';
+import { palette, useThemeColors } from '../../theme/colors';
 import type { RootStackParamList } from '../../navigation/types';
+
+const WELCOME_BUBBLE_DURATION_MS = 4000;
 
 const CURRENT_PATIENT = PATIENTS[0];
 
@@ -34,7 +44,6 @@ const DAILY_STREAK = 7;
 const GAME_PLACEHOLDER_COUNT = 4;
 
 function PatientHomeScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const { reminders, toggle: toggleReminderState } = useReminders(
@@ -47,11 +56,44 @@ function PatientHomeScreen() {
     >();
   const scrollViewRef = useRef<ComponentRef<typeof ScrollView>>(null);
   const gamesSectionY = useRef(0);
+  const welcomeBubbleTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
+  const [showWelcomeBubble, setShowWelcomeBubble] = useState(true);
+
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    border,
+    danger,
+  } = useThemeColors();
+
+  useEffect(() => {
+    welcomeBubbleTimeout.current = setTimeout(
+      () => setShowWelcomeBubble(false),
+      WELCOME_BUBBLE_DURATION_MS,
+    );
+    return () => {
+      if (welcomeBubbleTimeout.current) {
+        clearTimeout(welcomeBubbleTimeout.current);
+      }
+    };
+  }, []);
+
+  const handleRemiPress = () => {
+    vibrateIfEnabled(15);
+    if (welcomeBubbleTimeout.current) {
+      clearTimeout(welcomeBubbleTimeout.current);
+    }
+    setShowWelcomeBubble(true);
+    welcomeBubbleTimeout.current = setTimeout(
+      () => setShowWelcomeBubble(false),
+      WELCOME_BUBBLE_DURATION_MS,
+    );
+  };
 
   const toggleReminder = (id: string) => {
     vibrateIfEnabled(20);
@@ -200,6 +242,7 @@ function PatientHomeScreen() {
             onPress={handleSos}
             style={({ pressed }) => [
               styles.sosButton,
+              { backgroundColor: danger },
               pressed && styles.pressed,
             ]}
           >
@@ -245,6 +288,7 @@ function PatientHomeScreen() {
               onPress={() => toggleReminder(reminder.id)}
               style={[
                 styles.reminderRow,
+                { borderBottomColor: border },
                 index === reminders.length - 1 && styles.reminderRowLast,
               ]}
             >
@@ -289,6 +333,7 @@ function PatientHomeScreen() {
                 onPress={() => handleAppointmentPress(appointment)}
                 style={({ pressed }) => [
                   styles.appointmentRow,
+                  { borderBottomColor: border },
                   index === appointments.length - 1 &&
                     styles.appointmentRowLast,
                   pressed && styles.pressed,
@@ -315,6 +360,13 @@ function PatientHomeScreen() {
           <SectionTitle color={textColor}>
             {t('patientHome.gamesTitle')}
           </SectionTitle>
+          <View style={styles.remiNudge}>
+            <RemiMascot
+              pose="newGames"
+              message={t('remi.newGames')}
+              size={52}
+            />
+          </View>
           <GamesGrid
             count={GAME_PLACEHOLDER_COUNT}
             cardColor={cardColor}
@@ -357,6 +409,44 @@ function PatientHomeScreen() {
           </Pressable>
         </View>
       </ScrollView>
+
+      {showWelcomeBubble && (
+        <View
+          style={[
+            styles.remiBubbleWrap,
+            { bottom: insets.bottom + 24 + 64 + 10 },
+          ]}
+        >
+          <View
+            style={[
+              styles.remiBubble,
+              { backgroundColor: cardColor, borderColor: border },
+            ]}
+          >
+            <Text style={[styles.remiBubbleText, { color: textColor }]}>
+              {t('remi.welcome')}
+            </Text>
+          </View>
+          <View
+            style={[styles.remiBubbleTail, { borderTopColor: cardColor }]}
+          />
+        </View>
+      )}
+      <Pressable
+        accessibilityLabel={t('remi.welcome')}
+        onPress={handleRemiPress}
+        style={[
+          styles.remiFab,
+          { backgroundColor: cardColor, borderColor: border },
+          { bottom: insets.bottom + 24 },
+        ]}
+      >
+        <Image
+          source={REMI_IMAGES.welcome}
+          style={styles.remiFabImage}
+          resizeMode="cover"
+        />
+      </Pressable>
     </View>
   );
 }
@@ -458,7 +548,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -493,7 +583,6 @@ const styles = StyleSheet.create({
     height: 44,
     paddingHorizontal: 16,
     borderRadius: 22,
-    backgroundColor: '#D64545',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -542,7 +631,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
   },
   reminderRowLast: {
     borderBottomWidth: 0,
@@ -570,12 +658,12 @@ const styles = StyleSheet.create({
     height: 26,
     borderRadius: 13,
     borderWidth: 1.5,
-    borderColor: '#1B7A6D',
+    borderColor: palette.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkboxDone: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
   },
   checkmark: {
     color: '#FFFFFF',
@@ -589,7 +677,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
   },
   appointmentRowLast: {
     borderBottomWidth: 0,
@@ -618,7 +705,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: '#1B7A6D',
+    borderColor: palette.primary,
     borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',
@@ -655,7 +742,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   newGameButton: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
     borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 16,
@@ -664,6 +751,48 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '700',
+  },
+  remiNudge: {
+    marginBottom: 12,
+  },
+  remiFab: {
+    position: 'absolute',
+    right: 20,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    overflow: 'hidden',
+    borderWidth: 2,
+  },
+  remiFabImage: {
+    width: 64,
+    height: 64,
+  },
+  remiBubbleWrap: {
+    position: 'absolute',
+    right: 12,
+    alignItems: 'flex-end',
+    maxWidth: 220,
+  },
+  remiBubble: {
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  remiBubbleText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  remiBubbleTail: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 8,
+    borderRightWidth: 8,
+    borderTopWidth: 9,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    marginRight: 24,
   },
 });
 

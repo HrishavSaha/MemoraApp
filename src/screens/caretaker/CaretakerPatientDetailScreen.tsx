@@ -17,7 +17,6 @@ import {
   Text,
   TextInput,
   View,
-  useColorScheme,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GameProgressChart } from '../../components/GameProgressChart';
@@ -28,7 +27,10 @@ import {
   useAppointments,
   type AppointmentInput,
 } from '../../hooks/useAppointments';
+import { useCaretakerPatientNotes } from '../../hooks/useCaretakerPatientNotes';
+import { useDoctorNotes } from '../../hooks/useDoctorNotes';
 import { useReminders, type NewReminderInput } from '../../hooks/useReminders';
+import { palette, useThemeColors } from '../../theme/colors';
 import type { RootStackParamList } from '../../navigation/types';
 
 type ReminderModalState = {
@@ -37,7 +39,6 @@ type ReminderModalState = {
 };
 
 function CaretakerPatientDetailScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -61,6 +62,9 @@ function CaretakerPatientDetailScreen() {
     update: updateAppointment,
     remove: removeAppointment,
   } = useAppointments(route.params.patientId);
+  const { notes: doctorNotes } = useDoctorNotes();
+  const { notes: notesToDoctor, setNote: setNoteToDoctor } =
+    useCaretakerPatientNotes();
 
   const [reminderModal, setReminderModal] = useState<ReminderModalState | null>(
     null,
@@ -68,15 +72,24 @@ function CaretakerPatientDetailScreen() {
   const [editingAppointment, setEditingAppointment] = useState<
     Appointment | 'new' | null
   >(null);
+  const [doctorNoteModalVisible, setDoctorNoteModalVisible] = useState(false);
+  const [editingNoteToDoctor, setEditingNoteToDoctor] = useState(false);
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    border,
+    primaryTint,
+  } = useThemeColors();
 
   if (!patient) {
     return null;
   }
+
+  const noteFromDoctor = doctorNotes[patient.id];
+  const noteToDoctor = notesToDoctor[patient.id];
 
   const handleDeleteReminder = (reminder: Reminder) => {
     Alert.alert(
@@ -111,20 +124,35 @@ function CaretakerPatientDetailScreen() {
   return (
     <View style={[styles.screen, { backgroundColor }]}>
       <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={[styles.backButton, { backgroundColor: cardColor }]}
-        >
-          <Text style={styles.backGlyph}>←</Text>
-        </Pressable>
-        <View>
-          <Text style={[styles.headerTitle, { color: textColor }]}>
-            {patient.name}
-          </Text>
-          <Text style={[styles.headerSubtitle, { color: subTextColor }]}>
-            {patient.condition}
-          </Text>
+        <View style={styles.headerLeft}>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={[styles.backButton, { backgroundColor: cardColor }]}
+          >
+            <Text style={styles.backGlyph}>←</Text>
+          </Pressable>
+          <View>
+            <Text style={[styles.headerTitle, { color: textColor }]}>
+              {patient.name}
+            </Text>
+            <Text style={[styles.headerSubtitle, { color: subTextColor }]}>
+              {patient.condition}
+            </Text>
+          </View>
         </View>
+        <Pressable
+          onPress={() => setDoctorNoteModalVisible(true)}
+          style={({ pressed }) => [
+            styles.doctorNoteButton,
+            { backgroundColor: cardColor },
+            pressed && styles.pressed,
+          ]}
+        >
+          <Text style={styles.doctorNoteGlyph}>📋</Text>
+          <Text style={[styles.doctorNoteLabel, { color: textColor }]}>
+            {t('caretakerPatient.doctorNote')}
+          </Text>
+        </Pressable>
       </View>
 
       <ScrollView
@@ -152,6 +180,7 @@ function CaretakerPatientDetailScreen() {
               onPress={() => setReminderModal({ type: 'task' })}
               style={({ pressed }) => [
                 styles.addChip,
+                { backgroundColor: primaryTint },
                 pressed && styles.pressed,
               ]}
             >
@@ -163,6 +192,7 @@ function CaretakerPatientDetailScreen() {
               onPress={() => setReminderModal({ type: 'medicine' })}
               style={({ pressed }) => [
                 styles.addChip,
+                { backgroundColor: primaryTint },
                 pressed && styles.pressed,
               ]}
             >
@@ -178,6 +208,7 @@ function CaretakerPatientDetailScreen() {
               key={reminder.id}
               style={[
                 styles.reminderRow,
+                { borderBottomColor: border },
                 index === reminders.length - 1 && styles.rowLast,
               ]}
             >
@@ -241,7 +272,11 @@ function CaretakerPatientDetailScreen() {
           </Text>
           <Pressable
             onPress={() => setEditingAppointment('new')}
-            style={({ pressed }) => [styles.addChip, pressed && styles.pressed]}
+            style={({ pressed }) => [
+              styles.addChip,
+              { backgroundColor: primaryTint },
+              pressed && styles.pressed,
+            ]}
           >
             <Text style={styles.addChipLabel}>
               {t('caretakerPatient.addAppointment')}
@@ -259,6 +294,7 @@ function CaretakerPatientDetailScreen() {
                 key={appointment.id}
                 style={[
                   styles.appointmentRow,
+                  { borderBottomColor: border },
                   index === appointments.length - 1 && styles.rowLast,
                 ]}
               >
@@ -300,6 +336,37 @@ function CaretakerPatientDetailScreen() {
         </View>
 
         <GameProgressChart patientId={patient.id} />
+
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.sectionTitle, { color: textColor }]}>
+            {t('caretakerPatient.noteToDoctorTitle')}
+          </Text>
+          <Pressable
+            onPress={() => setEditingNoteToDoctor(true)}
+            style={({ pressed }) => [
+              styles.addChip,
+              { backgroundColor: primaryTint },
+              pressed && styles.pressed,
+            ]}
+          >
+            <Text style={styles.addChipLabel}>
+              {noteToDoctor
+                ? t('caretakerPatient.editNoteToDoctor')
+                : t('caretakerPatient.addNoteToDoctor')}
+            </Text>
+          </Pressable>
+        </View>
+        <View style={[styles.card, { backgroundColor: cardColor }]}>
+          {noteToDoctor ? (
+            <Text style={[styles.noteCardText, { color: textColor }]}>
+              {noteToDoctor}
+            </Text>
+          ) : (
+            <Text style={[styles.emptyText, { color: subTextColor }]}>
+              {t('caretakerPatient.noNoteToDoctor')}
+            </Text>
+          )}
+        </View>
       </ScrollView>
 
       <ReminderFormModal
@@ -334,7 +401,170 @@ function CaretakerPatientDetailScreen() {
           setEditingAppointment(null);
         }}
       />
+
+      <DoctorNoteModal
+        visible={doctorNoteModalVisible}
+        onClose={() => setDoctorNoteModalVisible(false)}
+        note={noteFromDoctor}
+      />
+
+      <NoteToDoctorModal
+        visible={editingNoteToDoctor}
+        initialNote={noteToDoctor}
+        onClose={() => setEditingNoteToDoctor(false)}
+        onSubmit={value => {
+          setNoteToDoctor(patient.id, value);
+          setEditingNoteToDoctor(false);
+        }}
+      />
     </View>
+  );
+}
+
+function DoctorNoteModal({
+  visible,
+  onClose,
+  note,
+}: {
+  visible: boolean;
+  onClose: () => void;
+  note: string | undefined;
+}) {
+  const { t } = useTranslation();
+  const {
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    overlay,
+  } = useThemeColors();
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <View style={[styles.modalOverlay, { backgroundColor: overlay }]}>
+        <View style={[styles.modalCard, { backgroundColor: cardColor }]}>
+          <Text style={[styles.modalTitle, { color: textColor }]}>
+            {t('caretakerPatient.doctorNoteModalTitle')}
+          </Text>
+          <ScrollView>
+            {note ? (
+              <Text style={[styles.noteCardText, { color: textColor }]}>
+                {note}
+              </Text>
+            ) : (
+              <Text style={[styles.emptyText, { color: subTextColor }]}>
+                {t('caretakerPatient.noDoctorNotes')}
+              </Text>
+            )}
+          </ScrollView>
+          <Pressable
+            onPress={onClose}
+            style={({ pressed }) => [
+              styles.modalButton,
+              styles.modalButtonPrimary,
+              pressed && styles.pressed,
+            ]}
+          >
+            <Text style={styles.modalButtonPrimaryLabel}>
+              {t('caretakerPatient.close')}
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+function NoteToDoctorModal({
+  visible,
+  initialNote,
+  onClose,
+  onSubmit,
+}: {
+  visible: boolean;
+  initialNote?: string;
+  onClose: () => void;
+  onSubmit: (note: string) => void;
+}) {
+  const { t } = useTranslation();
+  const [note, setNoteText] = useState('');
+
+  useEffect(() => {
+    if (visible) {
+      setNoteText(initialNote ?? '');
+    }
+  }, [visible, initialNote]);
+
+  const {
+    background: inputBackground,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    overlay,
+  } = useThemeColors();
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={[styles.modalOverlay, { backgroundColor: overlay }]}
+      >
+        <View style={[styles.modalCard, { backgroundColor: cardColor }]}>
+          <Text style={[styles.modalTitle, { color: textColor }]}>
+            {t('caretakerPatient.noteToDoctorModalTitle')}
+          </Text>
+
+          <Text style={[styles.formLabel, { color: subTextColor }]}>
+            {t('caretakerPatient.noteFieldLabel')}
+          </Text>
+          <TextInput
+            value={note}
+            onChangeText={setNoteText}
+            multiline
+            style={[
+              styles.formInput,
+              styles.formInputMultiline,
+              { backgroundColor: inputBackground, color: textColor },
+            ]}
+          />
+
+          <View style={styles.modalActions}>
+            <Pressable
+              onPress={onClose}
+              style={({ pressed }) => [
+                styles.modalButton,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Text style={[styles.modalButtonLabel, { color: subTextColor }]}>
+                {t('caretakerPatient.cancel')}
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => onSubmit(note.trim())}
+              style={({ pressed }) => [
+                styles.modalButton,
+                styles.modalButtonPrimary,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Text style={styles.modalButtonPrimaryLabel}>
+                {t('caretakerPatient.save')}
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </Modal>
   );
 }
 
@@ -352,7 +582,6 @@ function ReminderFormModal({
   onSubmit: (input: NewReminderInput) => void;
 }) {
   const { t } = useTranslation();
-  const isDarkMode = useColorScheme() === 'dark';
   const [name, setName] = useState('');
   const [time, setTime] = useState('');
   const [description, setDescription] = useState('');
@@ -367,10 +596,13 @@ function ReminderFormModal({
     }
   }, [visible, initial]);
 
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
-  const inputBackground = isDarkMode ? '#0F1A24' : '#F5F8F8';
+  const {
+    background: inputBackground,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    overlay,
+  } = useThemeColors();
 
   const handleSave = () => {
     if (
@@ -399,7 +631,7 @@ function ReminderFormModal({
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.modalOverlay}
+        style={[styles.modalOverlay, { backgroundColor: overlay }]}
       >
         <View style={[styles.modalCard, { backgroundColor: cardColor }]}>
           <Text style={[styles.modalTitle, { color: textColor }]}>
@@ -493,7 +725,6 @@ function AppointmentFormModal({
   onSubmit: (input: AppointmentInput) => void;
 }) {
   const { t } = useTranslation();
-  const isDarkMode = useColorScheme() === 'dark';
   const [doctorName, setDoctorName] = useState('');
   const [specialty, setSpecialty] = useState('');
   const [date, setDate] = useState('');
@@ -508,10 +739,13 @@ function AppointmentFormModal({
     }
   }, [visible, initial]);
 
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
-  const inputBackground = isDarkMode ? '#0F1A24' : '#F5F8F8';
+  const {
+    background: inputBackground,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    overlay,
+  } = useThemeColors();
 
   const handleSave = () => {
     if (
@@ -540,7 +774,7 @@ function AppointmentFormModal({
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.modalOverlay}
+        style={[styles.modalOverlay, { backgroundColor: overlay }]}
       >
         <View style={[styles.modalCard, { backgroundColor: cardColor }]}>
           <Text style={[styles.modalTitle, { color: textColor }]}>
@@ -659,9 +893,15 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    justifyContent: 'space-between',
     paddingHorizontal: 24,
     paddingBottom: 16,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    flexShrink: 1,
   },
   backButton: {
     width: 40,
@@ -672,6 +912,21 @@ const styles = StyleSheet.create({
   },
   backGlyph: {
     fontSize: 20,
+  },
+  doctorNoteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+  },
+  doctorNoteGlyph: {
+    fontSize: 16,
+  },
+  doctorNoteLabel: {
+    fontSize: 13,
+    fontWeight: '700',
   },
   headerTitle: {
     fontSize: 19,
@@ -716,7 +971,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   addChip: {
-    backgroundColor: 'rgba(27,122,109,0.12)',
     borderRadius: 12,
     paddingVertical: 6,
     paddingHorizontal: 10,
@@ -724,7 +978,7 @@ const styles = StyleSheet.create({
   addChipLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1B7A6D',
+    color: palette.primary,
   },
   card: {
     borderRadius: 16,
@@ -735,6 +989,12 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 16,
   },
+  noteCardText: {
+    fontSize: 14,
+    lineHeight: 20,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
   reminderRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -742,7 +1002,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
   },
   rowLast: {
     borderBottomWidth: 0,
@@ -770,12 +1029,12 @@ const styles = StyleSheet.create({
     height: 26,
     borderRadius: 13,
     borderWidth: 1.5,
-    borderColor: '#1B7A6D',
+    borderColor: palette.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkboxDone: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
   },
   checkmark: {
     color: '#FFFFFF',
@@ -789,7 +1048,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
   },
   appointmentGlyphWrap: {
     width: 30,
@@ -809,7 +1067,6 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -859,7 +1116,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   modalButtonPrimary: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
   },
   modalButtonPrimaryLabel: {
     fontSize: 15,

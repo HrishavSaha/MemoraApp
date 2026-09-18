@@ -2,15 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  Vibration,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { Pressable, StyleSheet, Text, Vibration, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RemiMascot } from '../../components/RemiMascot';
 import {
   generatePattern,
   type TilePatternProgress,
@@ -18,6 +12,7 @@ import {
 import { useTilePatternGame } from '../../hooks/useTilePatternGame';
 import { PATIENTS } from '../../data/mockPeople';
 import { isHapticsEnabled } from '../../settings/preferenceKeys';
+import { palette, useThemeColors } from '../../theme/colors';
 import type { RootStackParamList } from '../../navigation/types';
 
 const CURRENT_PATIENT = PATIENTS[0];
@@ -26,6 +21,31 @@ const FLASH_ON_MS = 650;
 const FLASH_GAP_MS = 300;
 const TAP_FEEDBACK_MS = 300;
 const ROUND_RESULT_DISPLAY_MS = 2000;
+
+const TILE_SIZE = 96;
+const TILE_GAP = 14;
+
+// One emoji per tile, keyed by position. Grids can outgrow this list as the
+// player levels up (gridSize climbs past 3x3), so tile identities wrap
+// around back to the start rather than running out.
+const TILE_EMOJIS = ['🦏', '☕', '🌺', '🪈', '⛰️', '🌧️', '🛶', '🧶', '🍵'];
+
+function emojiForTile(index: number): string {
+  return TILE_EMOJIS[index % TILE_EMOJIS.length];
+}
+
+// Cycled (not repeated back-to-back) on every tile light-up, so the flash
+// sequence and each correct tap feel colorful rather than a single hue.
+const TOUCH_COLORS = [
+  '#497D59', // primary green
+  '#C8A74C', // accent gold
+  '#C1653A', // terracotta
+  '#3E8E8E', // teal
+  '#8B5E83', // plum
+  '#A6763A', // bronze
+  '#5C7A99', // slate blue
+  '#6B8E4E', // moss
+];
 
 type Phase = 'ready' | 'showing' | 'input' | 'success' | 'fail';
 
@@ -36,7 +56,6 @@ function vibrateIfEnabled(pattern?: number | number[]) {
 }
 
 function TilePatternGameScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -48,18 +67,31 @@ function TilePatternGameScreen() {
   const [phase, setPhase] = useState<Phase>('ready');
   const [pattern, setPattern] = useState<number[]>([]);
   const [litTile, setLitTile] = useState<number | null>(null);
+  const [litColor, setLitColor] = useState(TOUCH_COLORS[0]);
   const [wrongTile, setWrongTile] = useState<number | null>(null);
   const [inputCount, setInputCount] = useState(0);
   const [lastRoundSeconds, setLastRoundSeconds] = useState<number | null>(null);
 
   const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
   const roundStartRef = useRef<number | null>(null);
+  const touchColorIndexRef = useRef(0);
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
-  const tileColor = isDarkMode ? '#1E3540' : '#E3ECEC';
+  const nextTouchColor = () => {
+    const color =
+      TOUCH_COLORS[touchColorIndexRef.current % TOUCH_COLORS.length];
+    touchColorIndexRef.current += 1;
+    return color;
+  };
+
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    muted: tileColor,
+    primary,
+    danger,
+  } = useThemeColors();
 
   const clearTimers = () => {
     timeouts.current.forEach(id => clearTimeout(id));
@@ -76,6 +108,7 @@ function TilePatternGameScreen() {
   const playPattern = (sequence: number[]) => {
     sequence.forEach((tileIndex, step) => {
       schedule(() => {
+        setLitColor(nextTouchColor());
         setLitTile(tileIndex);
         schedule(() => setLitTile(null), FLASH_ON_MS - 150);
       }, step * (FLASH_ON_MS + FLASH_GAP_MS));
@@ -115,6 +148,7 @@ function TilePatternGameScreen() {
 
     if (tileIndex === pattern[inputCount]) {
       vibrateIfEnabled(15);
+      setLitColor(nextTouchColor());
       setLitTile(tileIndex);
       schedule(() => setLitTile(null), TAP_FEEDBACK_MS);
 
@@ -195,9 +229,9 @@ function TilePatternGameScreen() {
               {
                 color:
                   phase === 'success'
-                    ? '#2E9E5B'
+                    ? primary
                     : phase === 'fail'
-                    ? '#D64545'
+                    ? danger
                     : textColor,
               },
             ]}
@@ -213,19 +247,43 @@ function TilePatternGameScreen() {
           </Text>
         </View>
 
+        {(phase === 'input' || phase === 'success' || phase === 'fail') && (
+          <RemiMascot
+            pose={
+              phase === 'success'
+                ? 'win'
+                : phase === 'fail'
+                ? 'fail'
+                : 'playing'
+            }
+            message={
+              phase === 'success'
+                ? t('remi.win')
+                : phase === 'fail'
+                ? t('remi.fail')
+                : undefined
+            }
+            size={56}
+          />
+        )}
+
         <View
           style={[
             styles.grid,
-            { width: progress.gridSize * 76 + (progress.gridSize - 1) * 12 },
+            {
+              width:
+                progress.gridSize * TILE_SIZE +
+                (progress.gridSize - 1) * TILE_GAP,
+            },
           ]}
         >
           {tiles.map((_, index) => {
             const isLit = litTile === index;
             const isWrong = wrongTile === index;
             const backgroundColorForTile = isWrong
-              ? '#D64545'
+              ? danger
               : isLit
-              ? '#1B7A6D'
+              ? litColor
               : tileColor;
             return (
               <Pressable
@@ -237,7 +295,9 @@ function TilePatternGameScreen() {
                   { backgroundColor: backgroundColorForTile },
                   pressed && phase === 'input' && styles.tilePressed,
                 ]}
-              />
+              >
+                <Text style={styles.tileEmoji}>{emojiForTile(index)}</Text>
+              </Pressable>
             );
           })}
         </View>
@@ -323,13 +383,18 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: TILE_GAP,
     justifyContent: 'center',
   },
   tile: {
-    width: 76,
-    height: 76,
-    borderRadius: 16,
+    width: TILE_SIZE,
+    height: TILE_SIZE,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tileEmoji: {
+    fontSize: 40,
   },
   tilePressed: {
     opacity: 0.8,
@@ -339,7 +404,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   startButton: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
     borderRadius: 14,
     paddingVertical: 14,
     paddingHorizontal: 32,

@@ -2,17 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { readAppointments, type Appointment } from '../../data/appointments';
 import { DOCTOR, PATIENTS, type MockPatient } from '../../data/mockPeople';
+import { palette, useThemeColors } from '../../theme/colors';
 import { parseAppointmentDateTime } from '../../utils/appointmentDate';
 import type { RootStackParamList } from '../../navigation/types';
 
@@ -31,7 +25,6 @@ function nextAppointmentFor(patientId: string): Appointment | null {
 }
 
 function DoctorHomeScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -60,10 +53,15 @@ function DoctorHomeScreen() {
     });
   }, []);
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    border,
+    primaryDark,
+    primaryTint,
+  } = useThemeColors();
 
   const handlePatientPress = (patient: MockPatient) => {
     navigation.navigate('DoctorPatientDetail', { patientId: patient.id });
@@ -73,7 +71,7 @@ function DoctorHomeScreen() {
     <View style={[styles.screen, { backgroundColor }]}>
       <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <View style={styles.userInfo}>
-          <View style={styles.avatar}>
+          <View style={[styles.avatar, { backgroundColor: primaryDark }]}>
             <Text style={styles.avatarLabel}>{DOCTOR_AVATAR_INITIAL}</Text>
           </View>
           <View>
@@ -130,6 +128,7 @@ function DoctorHomeScreen() {
               onPress={() => handlePatientPress(patient)}
               style={({ pressed }) => [
                 styles.patientRow,
+                { borderBottomColor: border },
                 index === scheduledPatients.length - 1 && styles.patientRowLast,
                 pressed && styles.pressed,
               ]}
@@ -150,6 +149,7 @@ function DoctorHomeScreen() {
               <View
                 style={[
                   styles.appointmentBadge,
+                  { backgroundColor: primaryTint },
                   !nextAppointment && styles.appointmentBadgeMuted,
                 ]}
               >
@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#2E6FBF',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -245,7 +244,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
   },
   patientRowLast: {
     borderBottomWidth: 0,
@@ -254,7 +252,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#2E6FBF',
+    backgroundColor: palette.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -275,7 +273,6 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   appointmentBadge: {
-    backgroundColor: 'rgba(46,111,191,0.14)',
     borderRadius: 12,
     paddingVertical: 4,
     paddingHorizontal: 10,
@@ -287,7 +284,7 @@ const styles = StyleSheet.create({
   appointmentBadgeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#2E6FBF',
+    color: palette.primary,
     textAlign: 'right',
   },
 });

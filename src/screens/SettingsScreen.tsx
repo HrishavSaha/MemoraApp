@@ -9,7 +9,6 @@ import {
   Switch,
   Text,
   View,
-  useColorScheme,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -19,10 +18,11 @@ import {
   readToggle,
 } from '../settings/preferenceKeys';
 import { storage } from '../storage/mmkv';
+import { useThemeColors } from '../theme/colors';
 import type { RootStackParamList } from '../navigation/types';
 
 function SettingsScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const { background, card, text, subtext, border, danger } = useThemeColors();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -37,11 +37,6 @@ function SettingsScreen() {
   const [hapticsEnabled, setHapticsEnabled] = useState(() =>
     readToggle(HAPTICS_KEY, true),
   );
-
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
 
   const toggleMusic = (value: boolean) => {
     setMusicEnabled(value);
@@ -60,16 +55,19 @@ function SettingsScreen() {
     navigation.reset({ index: 0, routes: [{ name: 'RoleSelection' }] });
   };
 
+  const rowStyle = [styles.settingRow, { borderBottomColor: border }];
+
   return (
-    <View style={[styles.screen, { backgroundColor }]}>
+    <View style={[styles.screen, { backgroundColor: background }]}>
       <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <Pressable
           accessibilityLabel={t('settings.back')}
           onPress={() => navigation.goBack()}
-          style={[styles.backButton, { backgroundColor: cardColor }]}>
+          style={[styles.backButton, { backgroundColor: card }]}
+        >
           <Text style={styles.backGlyph}>←</Text>
         </Pressable>
-        <Text style={[styles.headerTitle, { color: textColor }]}>
+        <Text style={[styles.headerTitle, { color: text }]}>
           {t('settings.title')}
         </Text>
       </View>
@@ -79,19 +77,20 @@ function SettingsScreen() {
           styles.scrollContent,
           { paddingBottom: insets.bottom + 24 },
         ]}
-        showsVerticalScrollIndicator={false}>
-        <View style={[styles.card, { backgroundColor: cardColor }]}>
-          <View style={styles.settingRow}>
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={[styles.card, { backgroundColor: card }]}>
+          <View style={rowStyle}>
             <Text style={styles.settingIcon}>🎵</Text>
-            <Text style={[styles.settingLabel, { color: textColor }]}>
+            <Text style={[styles.settingLabel, { color: text }]}>
               {t('settings.music')}
             </Text>
             <Switch value={musicEnabled} onValueChange={toggleMusic} />
           </View>
 
-          <View style={styles.settingRow}>
+          <View style={rowStyle}>
             <Text style={styles.settingIcon}>🗣️</Text>
-            <Text style={[styles.settingLabel, { color: textColor }]}>
+            <Text style={[styles.settingLabel, { color: text }]}>
               {t('settings.audioSupport')}
             </Text>
             <Switch
@@ -100,9 +99,9 @@ function SettingsScreen() {
             />
           </View>
 
-          <View style={styles.settingRow}>
+          <View style={rowStyle}>
             <Text style={styles.settingIcon}>📳</Text>
-            <Text style={[styles.settingLabel, { color: textColor }]}>
+            <Text style={[styles.settingLabel, { color: text }]}>
               {t('settings.haptics')}
             </Text>
             <Switch value={hapticsEnabled} onValueChange={toggleHaptics} />
@@ -112,16 +111,20 @@ function SettingsScreen() {
             onPress={() =>
               navigation.navigate('Localisation', { fromSettings: true })
             }
-            style={[styles.settingRow, styles.settingRowLast]}>
+            style={[rowStyle, styles.settingRowLast]}
+          >
             <Text style={styles.settingIcon}>🌐</Text>
-            <Text style={[styles.settingLabel, { color: textColor }]}>
+            <Text style={[styles.settingLabel, { color: text }]}>
               {t('settings.switchLanguage')}
             </Text>
-            <Text style={[styles.chevron, { color: subTextColor }]}>›</Text>
+            <Text style={[styles.chevron, { color: subtext }]}>›</Text>
           </Pressable>
         </View>
 
-        <Pressable style={styles.logoutButton} onPress={handleLogout}>
+        <Pressable
+          style={[styles.logoutButton, { backgroundColor: danger }]}
+          onPress={handleLogout}
+        >
           <Text style={styles.logoutLabel}>{t('settings.logout')}</Text>
         </Pressable>
       </ScrollView>
@@ -168,7 +171,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
   },
   settingRowLast: {
     borderBottomWidth: 0,
@@ -190,7 +192,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
-    backgroundColor: '#D64545',
   },
   logoutLabel: {
     color: '#FFFFFF',

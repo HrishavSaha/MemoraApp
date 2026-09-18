@@ -10,9 +10,9 @@ import {
   Text,
   Vibration,
   View,
-  useColorScheme,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RemiMascot } from '../../components/RemiMascot';
 import {
   generateRound,
   type CategoryId,
@@ -22,6 +22,7 @@ import {
 import { useObjectSortingGame } from '../../hooks/useObjectSortingGame';
 import { PATIENTS } from '../../data/mockPeople';
 import { isHapticsEnabled } from '../../settings/preferenceKeys';
+import { palette, useThemeColors } from '../../theme/colors';
 import type { RootStackParamList } from '../../navigation/types';
 
 const CURRENT_PATIENT = PATIENTS[0];
@@ -39,7 +40,6 @@ function vibrateIfEnabled(pattern?: number | number[]) {
 }
 
 function ObjectSortingGameScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -60,10 +60,14 @@ function ObjectSortingGameScreen() {
   >({});
   const binLayouts = useRef<Partial<Record<CategoryId, BinRect>>>({});
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    primary,
+    danger,
+  } = useThemeColors();
 
   const clearTimers = () => {
     timeouts.current.forEach(id => clearTimeout(id));
@@ -209,9 +213,9 @@ function ObjectSortingGameScreen() {
               {
                 color:
                   phase === 'success'
-                    ? '#2E9E5B'
+                    ? primary
                     : phase === 'fail'
-                    ? '#D64545'
+                    ? danger
                     : textColor,
               },
             ]}
@@ -226,6 +230,26 @@ function ObjectSortingGameScreen() {
             {promptForPhase()}
           </Text>
         </View>
+
+        {(phase === 'input' || phase === 'success' || phase === 'fail') && (
+          <RemiMascot
+            pose={
+              phase === 'success'
+                ? 'win'
+                : phase === 'fail'
+                ? 'fail'
+                : 'playing'
+            }
+            message={
+              phase === 'success'
+                ? t('remi.win')
+                : phase === 'fail'
+                ? t('remi.fail')
+                : undefined
+            }
+            size={56}
+          />
+        )}
 
         {phase !== 'ready' && (
           <>
@@ -252,7 +276,7 @@ function ObjectSortingGameScreen() {
                   style={[
                     styles.bin,
                     { backgroundColor: cardColor },
-                    wrongBin === category && styles.binWrong,
+                    wrongBin === category && { backgroundColor: danger },
                   ]}
                 >
                   <Text style={[styles.binLabel, { color: textColor }]}>
@@ -447,9 +471,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 8,
   },
-  binWrong: {
-    backgroundColor: '#D64545',
-  },
   binLabel: {
     fontSize: 12,
     fontWeight: '600',
@@ -460,7 +481,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   startButton: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
     borderRadius: 14,
     paddingVertical: 14,
     paddingHorizontal: 32,

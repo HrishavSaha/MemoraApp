@@ -12,11 +12,11 @@ import {
   Text,
   TextInput,
   View,
-  useColorScheme,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CALL_LOG, type CallDirection } from '../../data/callLog';
 import { useCallNotes } from '../../hooks/useCallNotes';
+import { palette, useThemeColors } from '../../theme/colors';
 import type { RootStackParamList } from '../../navigation/types';
 
 const DIRECTION_GLYPH: Record<CallDirection, string> = {
@@ -26,7 +26,6 @@ const DIRECTION_GLYPH: Record<CallDirection, string> = {
 };
 
 function CaretakerCallHistoryScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -36,11 +35,15 @@ function CaretakerCallHistoryScreen() {
   const { notes, setNote } = useCallNotes();
   const [editingCallId, setEditingCallId] = useState<string | null>(null);
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
-  const missedColor = '#D64545';
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    border,
+    danger: missedColor,
+    primaryTint,
+  } = useThemeColors();
 
   return (
     <View style={[styles.screen, { backgroundColor }]}>
@@ -72,6 +75,7 @@ function CaretakerCallHistoryScreen() {
                 key={entry.id}
                 style={[
                   styles.callRow,
+                  { borderBottomColor: border },
                   index === CALL_LOG.length - 1 && styles.callRowLast,
                 ]}
               >
@@ -117,6 +121,7 @@ function CaretakerCallHistoryScreen() {
                   onPress={() => setEditingCallId(entry.id)}
                   style={({ pressed }) => [
                     styles.noteButton,
+                    { backgroundColor: primaryTint },
                     pressed && styles.pressed,
                   ]}
                 >
@@ -159,7 +164,6 @@ function NoteFormModal({
   onSubmit: (note: string) => void;
 }) {
   const { t } = useTranslation();
-  const isDarkMode = useColorScheme() === 'dark';
   const [note, setNoteText] = useState('');
 
   useEffect(() => {
@@ -168,10 +172,13 @@ function NoteFormModal({
     }
   }, [visible, initialNote]);
 
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
-  const inputBackground = isDarkMode ? '#0F1A24' : '#F5F8F8';
+  const {
+    background: inputBackground,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    overlay,
+  } = useThemeColors();
 
   return (
     <Modal
@@ -182,7 +189,7 @@ function NoteFormModal({
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.modalOverlay}
+        style={[styles.modalOverlay, { backgroundColor: overlay }]}
       >
         <View style={[styles.modalCard, { backgroundColor: cardColor }]}>
           <Text style={[styles.modalTitle, { color: textColor }]}>
@@ -270,7 +277,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
     gap: 8,
   },
   callRowLast: {
@@ -308,7 +314,6 @@ const styles = StyleSheet.create({
   },
   noteButton: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(27,122,109,0.12)',
     borderRadius: 12,
     paddingVertical: 6,
     paddingHorizontal: 10,
@@ -316,11 +321,10 @@ const styles = StyleSheet.create({
   noteButtonLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1B7A6D',
+    color: palette.primary,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -367,7 +371,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   modalButtonPrimary: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
   },
   modalButtonPrimaryLabel: {
     fontSize: 15,

@@ -101,7 +101,17 @@
     "fieldDoctorName": "ডাক্তৰৰ নাম",
     "fieldSpecialty": "বিশেষত্ব",
     "fieldDate": "তাৰিখ",
-    "validationRequired": "অনুগ্রহ কৰি প্ৰয়োজনীয় ফিল্ডসমূহ পূৰণ কৰক"
+    "validationRequired": "অনুগ্রহ কৰি প্ৰয়োজনীয় ফিল্ডসমূহ পূৰণ কৰক",
+    "doctorNote": "ডাক্তৰৰ টোকা",
+    "doctorNoteModalTitle": "ডাক্তৰৰ টোকা",
+    "noDoctorNotes": "ডাক্তৰৰ পৰা এতিয়ালৈকে কোনো টোকা নাই",
+    "close": "বন্ধ কৰক",
+    "noteToDoctorTitle": "ডাক্তৰৰ বাবে টোকা",
+    "addNoteToDoctor": "+ টোকা",
+    "editNoteToDoctor": "টোকা সম্পাদনা কৰক",
+    "noNoteToDoctor": "এতিয়ালৈকে কোনো টোকা যোগ কৰা হোৱা নাই",
+    "noteToDoctorModalTitle": "ডাক্তৰৰ বাবে টোকা",
+    "noteFieldLabel": "টোকা"
   },
   "doctorHome": {
     "settings": "ছেটিংছ",
@@ -138,10 +148,21 @@
     "adherenceDetailTitle": "দিন-ভিত্তিক মান্যতা",
     "caretakerNotesTitle": "পৰিচৰ্যাকৰ্তাৰ টোকা",
     "noNotes": "এতিয়ালৈকে কোনো টোকা নাই",
-    "close": "বন্ধ কৰক"
+    "close": "বন্ধ কৰক",
+    "cancel": "বাতিল কৰক",
+    "save": "সংৰক্ষণ কৰক",
+    "noteFromCaretakerTitle": "পৰিচৰ্যাকৰ্তাৰ টোকা",
+    "noNoteFromCaretaker": "পৰিচৰ্যাকৰ্তাৰ পৰা এতিয়ালৈকে কোনো টোকা নাই",
+    "noteToCaretakerTitle": "পৰিচৰ্যাকৰ্তাৰ বাবে টোকা",
+    "addNoteToCaretaker": "+ টোকা",
+    "editNoteToCaretaker": "টোকা সম্পাদনা কৰক",
+    "noNoteToCaretaker": "এতিয়ালৈকে কোনো টোকা যোগ কৰা হোৱা নাই",
+    "noteToCaretakerModalTitle": "পৰিচৰ্যাকৰ্তাৰ বাবে টোকা",
+    "noteFieldLabel": "টোকা"
   },
   "gameProgress": {
     "title": "সাপ্তাহিক খেল প্ৰগতি",
+    "titleMonthly": "খেল প্ৰগতি (যোৱা ৪ সপ্তাহ)",
     "legendIncrease": "উন্নতি হৈছে",
     "legendDecrease": "অবনতি হৈছে",
     "legendSame": "কোনো পৰিবৰ্তন নাই"
@@ -246,5 +267,11 @@
       "chair": "চেয়াৰ",
       "umbrella": "ছাতা"
     }
+  },
+  "remi": {
+    "welcome": "নমস্কাৰ! পুনৰ স্বাগতম!",
+    "newGames": "এই নতুন খেলবোৰ চেষ্টা কৰক!",
+    "win": "বাহ! এইদৰেই আগবাঢ়ি যাওক!!",
+    "fail": "চিন্তা নকৰিব! খেলি থাকক!"
   }
 }

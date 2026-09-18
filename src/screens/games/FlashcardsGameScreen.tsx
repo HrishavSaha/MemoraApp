@@ -2,15 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  Vibration,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { Pressable, StyleSheet, Text, Vibration, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RemiMascot } from '../../components/RemiMascot';
 import {
   generateDeck,
   type CardResult,
@@ -20,6 +14,7 @@ import {
 import { useFlashcardsGame } from '../../hooks/useFlashcardsGame';
 import { PATIENTS } from '../../data/mockPeople';
 import { isHapticsEnabled } from '../../settings/preferenceKeys';
+import { palette, useThemeColors } from '../../theme/colors';
 import type { RootStackParamList } from '../../navigation/types';
 
 const CURRENT_PATIENT = PATIENTS[0];
@@ -35,7 +30,6 @@ function vibrateIfEnabled(pattern?: number | number[]) {
 }
 
 function FlashcardsGameScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -51,10 +45,14 @@ function FlashcardsGameScreen() {
 
   const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    primary,
+    danger,
+  } = useThemeColors();
 
   const clearTimers = () => {
     timeouts.current.forEach(id => clearTimeout(id));
@@ -158,6 +156,16 @@ function FlashcardsGameScreen() {
           </Text>
         </View>
 
+        {(phase === 'front' ||
+          phase === 'back' ||
+          phase === 'deckComplete') && (
+          <RemiMascot
+            pose={phase === 'deckComplete' ? 'win' : 'playing'}
+            message={phase === 'deckComplete' ? t('remi.win') : undefined}
+            size={56}
+          />
+        )}
+
         {(phase === 'front' || phase === 'back') && currentCard && (
           <Pressable
             disabled={phase !== 'front'}
@@ -183,7 +191,7 @@ function FlashcardsGameScreen() {
               onPress={() => handleGrade('wrong')}
               style={({ pressed }) => [
                 styles.gradeButton,
-                styles.gradeButtonWrong,
+                { backgroundColor: danger },
                 pressed && styles.pressed,
               ]}
             >
@@ -195,7 +203,7 @@ function FlashcardsGameScreen() {
               onPress={() => handleGrade('correct')}
               style={({ pressed }) => [
                 styles.gradeButton,
-                styles.gradeButtonCorrect,
+                { backgroundColor: primary },
                 pressed && styles.pressed,
               ]}
             >
@@ -312,12 +320,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
   },
-  gradeButtonWrong: {
-    backgroundColor: '#D64545',
-  },
-  gradeButtonCorrect: {
-    backgroundColor: '#2E9E5B',
-  },
   gradeButtonLabel: {
     color: '#FFFFFF',
     fontSize: 15,
@@ -328,7 +330,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   startButton: {
-    backgroundColor: '#1B7A6D',
+    backgroundColor: palette.primary,
     borderRadius: 14,
     paddingVertical: 14,
     paddingHorizontal: 32,

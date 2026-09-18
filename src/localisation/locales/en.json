@@ -101,7 +101,17 @@
     "fieldDoctorName": "Doctor name",
     "fieldSpecialty": "Specialty",
     "fieldDate": "Date",
-    "validationRequired": "Please fill in the required fields"
+    "validationRequired": "Please fill in the required fields",
+    "doctorNote": "Doctor's Note",
+    "doctorNoteModalTitle": "Doctor's Note",
+    "noDoctorNotes": "No notes from the doctor yet",
+    "close": "Close",
+    "noteToDoctorTitle": "Note to Doctor",
+    "addNoteToDoctor": "+ Note",
+    "editNoteToDoctor": "Edit note",
+    "noNoteToDoctor": "No note added yet",
+    "noteToDoctorModalTitle": "Note to doctor",
+    "noteFieldLabel": "Note"
   },
   "doctorHome": {
     "settings": "Settings",
@@ -138,10 +148,21 @@
     "adherenceDetailTitle": "Day-by-day Adherence",
     "caretakerNotesTitle": "Caretaker Notes",
     "noNotes": "No notes yet",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "noteFromCaretakerTitle": "Note from Caretaker",
+    "noNoteFromCaretaker": "No note from the caretaker yet",
+    "noteToCaretakerTitle": "Note to Caretaker",
+    "addNoteToCaretaker": "+ Note",
+    "editNoteToCaretaker": "Edit note",
+    "noNoteToCaretaker": "No note added yet",
+    "noteToCaretakerModalTitle": "Note to caretaker",
+    "noteFieldLabel": "Note"
   },
   "gameProgress": {
     "title": "Weekly Game Progress",
+    "titleMonthly": "Game Progress (Last 4 Weeks)",
     "legendIncrease": "Improved",
     "legendDecrease": "Declined",
     "legendSame": "No change"
@@ -246,5 +267,11 @@
       "chair": "Chair",
       "umbrella": "Umbrella"
     }
+  },
+  "remi": {
+    "welcome": "Hi! Welcome back!",
+    "newGames": "Try these new games!",
+    "win": "Good job! Keep going!!",
+    "fail": "Don't worry! Keep playing!"
   }
 }

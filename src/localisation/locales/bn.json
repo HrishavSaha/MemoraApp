@@ -101,7 +101,17 @@
     "fieldDoctorName": "ডাক্তারের নাম",
     "fieldSpecialty": "বিশেষত্ব",
     "fieldDate": "তারিখ",
-    "validationRequired": "অনুগ্রহ করে প্রয়োজনীয় ক্ষেত্রগুলি পূরণ করুন"
+    "validationRequired": "অনুগ্রহ করে প্রয়োজনীয় ক্ষেত্রগুলি পূরণ করুন",
+    "doctorNote": "ডাক্তারের নোট",
+    "doctorNoteModalTitle": "ডাক্তারের নোট",
+    "noDoctorNotes": "ডাক্তারের কাছ থেকে এখনও কোনো নোট নেই",
+    "close": "বন্ধ করুন",
+    "noteToDoctorTitle": "ডাক্তারের জন্য নোট",
+    "addNoteToDoctor": "+ নোট",
+    "editNoteToDoctor": "নোট সম্পাদনা করুন",
+    "noNoteToDoctor": "এখনও কোনো নোট যোগ করা হয়নি",
+    "noteToDoctorModalTitle": "ডাক্তারের জন্য নোট",
+    "noteFieldLabel": "নোট"
   },
   "doctorHome": {
     "settings": "সেটিংস",
@@ -138,10 +148,21 @@
     "adherenceDetailTitle": "দিন-ভিত্তিক মান্যতা",
     "caretakerNotesTitle": "পরিচর্যাকারীর নোট",
     "noNotes": "এখনও কোনো নোট নেই",
-    "close": "বন্ধ করুন"
+    "close": "বন্ধ করুন",
+    "cancel": "বাতিল করুন",
+    "save": "সংরক্ষণ করুন",
+    "noteFromCaretakerTitle": "পরিচর্যাকারীর নোট",
+    "noNoteFromCaretaker": "পরিচর্যাকারীর কাছ থেকে এখনও কোনো নোট নেই",
+    "noteToCaretakerTitle": "পরিচর্যাকারীর জন্য নোট",
+    "addNoteToCaretaker": "+ নোট",
+    "editNoteToCaretaker": "নোট সম্পাদনা করুন",
+    "noNoteToCaretaker": "এখনও কোনো নোট যোগ করা হয়নি",
+    "noteToCaretakerModalTitle": "পরিচর্যাকারীর জন্য নোট",
+    "noteFieldLabel": "নোট"
   },
   "gameProgress": {
     "title": "সাপ্তাহিক গেম অগ্রগতি",
+    "titleMonthly": "গেম অগ্রগতি (গত ৪ সপ্তাহ)",
     "legendIncrease": "উন্নতি হয়েছে",
     "legendDecrease": "অবনতি হয়েছে",
     "legendSame": "কোনো পরিবর্তন নেই"
@@ -246,5 +267,11 @@
       "chair": "চেয়ার",
       "umbrella": "ছাতা"
     }
+  },
+  "remi": {
+    "welcome": "হাই! আবার স্বাগতম!",
+    "newGames": "এই নতুন গেমগুলো চেষ্টা করুন!",
+    "win": "দারুণ! এভাবেই চালিয়ে যাও!!",
+    "fail": "চিন্তা করো না! খেলতে থাকো!"
   }
 }

@@ -101,7 +101,17 @@
     "fieldDoctorName": "डॉक्टर का नाम",
     "fieldSpecialty": "विशेषज्ञता",
     "fieldDate": "तिथि",
-    "validationRequired": "कृपया आवश्यक फ़ील्ड भरें"
+    "validationRequired": "कृपया आवश्यक फ़ील्ड भरें",
+    "doctorNote": "डॉक्टर का नोट",
+    "doctorNoteModalTitle": "डॉक्टर का नोट",
+    "noDoctorNotes": "डॉक्टर की ओर से अभी तक कोई नोट नहीं",
+    "close": "बंद करें",
+    "noteToDoctorTitle": "डॉक्टर के लिए नोट",
+    "addNoteToDoctor": "+ नोट",
+    "editNoteToDoctor": "नोट संपादित करें",
+    "noNoteToDoctor": "अभी तक कोई नोट नहीं जोड़ा गया",
+    "noteToDoctorModalTitle": "डॉक्टर के लिए नोट",
+    "noteFieldLabel": "नोट"
   },
   "doctorHome": {
     "settings": "सेटिंग्स",
@@ -138,10 +148,21 @@
     "adherenceDetailTitle": "दिन-वार अनुपालन",
     "caretakerNotesTitle": "देखभालकर्ता के नोट्स",
     "noNotes": "अभी तक कोई नोट नहीं",
-    "close": "बंद करें"
+    "close": "बंद करें",
+    "cancel": "रद्द करें",
+    "save": "सहेजें",
+    "noteFromCaretakerTitle": "देखभालकर्ता का नोट",
+    "noNoteFromCaretaker": "देखभालकर्ता की ओर से अभी तक कोई नोट नहीं",
+    "noteToCaretakerTitle": "देखभालकर्ता के लिए नोट",
+    "addNoteToCaretaker": "+ नोट",
+    "editNoteToCaretaker": "नोट संपादित करें",
+    "noNoteToCaretaker": "अभी तक कोई नोट नहीं जोड़ा गया",
+    "noteToCaretakerModalTitle": "देखभालकर्ता के लिए नोट",
+    "noteFieldLabel": "नोट"
   },
   "gameProgress": {
     "title": "साप्ताहिक खेल प्रगति",
+    "titleMonthly": "खेल प्रगति (पिछले 4 सप्ताह)",
     "legendIncrease": "सुधार हुआ",
     "legendDecrease": "गिरावट आई",
     "legendSame": "कोई बदलाव नहीं"
@@ -246,5 +267,11 @@
       "chair": "कुर्सी",
       "umbrella": "छाता"
     }
+  },
+  "remi": {
+    "welcome": "नमस्ते! वापसी पर स्वागत है!",
+    "newGames": "ये नए खेल आज़माएँ!",
+    "win": "शाबाश! ऐसे ही चलते रहो!!",
+    "fail": "चिंता न करें! खेलते रहें!"
   }
 }

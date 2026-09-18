@@ -1,15 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useThemeColors } from '../../theme/colors';
 import type { RootStackParamList } from '../../navigation/types';
 
 type PastAppointment = {
@@ -45,7 +39,6 @@ const PAST_APPOINTMENTS: PastAppointment[] = [
 ];
 
 function DoctorPastAppointmentsScreen() {
-  const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigation =
@@ -53,10 +46,13 @@ function DoctorPastAppointmentsScreen() {
       NativeStackNavigationProp<RootStackParamList, 'DoctorPastAppointments'>
     >();
 
-  const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
-  const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
-  const textColor = isDarkMode ? '#FFFFFF' : '#1B4B4B';
-  const subTextColor = isDarkMode ? '#B8CFCF' : '#5A7A7A';
+  const {
+    background: backgroundColor,
+    card: cardColor,
+    text: textColor,
+    subtext: subTextColor,
+    border,
+  } = useThemeColors();
 
   return (
     <View style={[styles.screen, { backgroundColor }]}>
@@ -86,6 +82,7 @@ function DoctorPastAppointmentsScreen() {
               key={entry.id}
               style={[
                 styles.row,
+                { borderBottomColor: border },
                 index === PAST_APPOINTMENTS.length - 1 && styles.rowLast,
               ]}
             >
@@ -148,7 +145,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(150,170,170,0.2)',
   },
   rowLast: {
     borderBottomWidth: 0,
