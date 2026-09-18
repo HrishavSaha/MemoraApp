@@ -4,9 +4,11 @@
 
 import {
   applyRoundResult,
+  generateRound,
   MAX_OBJECTS,
   MIN_BINS,
   MIN_OBJECTS,
+  SORTING_CATEGORIES,
   type ObjectSortingProgress,
 } from '../src/data/objectSortingGame';
 
@@ -134,5 +136,31 @@ describe('applyRoundResult', () => {
 
     const afterWins = applyRoundResult({ ...base, consecutiveWins: 2 }, 'loss');
     expect(afterWins.consecutiveWins).toBe(0);
+  });
+});
+
+describe('generateRound', () => {
+  test('produces the requested number of bins and objects', () => {
+    const round = generateRound(5, 3);
+    expect(round.bins).toEqual(SORTING_CATEGORIES.slice(0, 3));
+    expect(round.objects).toHaveLength(5);
+  });
+
+  test("every object belongs to one of the round's bins", () => {
+    const round = generateRound(7, 4);
+    round.objects.forEach(object => {
+      expect(round.bins).toContain(object.category);
+    });
+  });
+
+  test('never produces duplicate objects within a round', () => {
+    const round = generateRound(MAX_OBJECTS, 6);
+    const ids = round.objects.map(object => object.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  test('clamps the bin count to the number of available categories', () => {
+    const round = generateRound(3, SORTING_CATEGORIES.length + 5);
+    expect(round.bins).toEqual(SORTING_CATEGORIES);
   });
 });

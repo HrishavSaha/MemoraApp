@@ -97,40 +97,105 @@ export function applyRoundResult(
   return { objectCount, binCount, consecutiveWins: 0, consecutiveLosses: 0 };
 }
 
-export const OBJECT_CATEGORIES = [
-  'red',
-  'blue',
-  'green',
-  'yellow',
-  'purple',
-  'orange',
-  'pink',
-  'teal',
+export const SORTING_CATEGORIES = [
+  'fruits',
+  'vegetables',
+  'animals',
+  'clothing',
+  'kitchen',
+  'vehicles',
 ] as const;
 
-export type ObjectCategory = (typeof OBJECT_CATEGORIES)[number];
+export type CategoryId = (typeof SORTING_CATEGORIES)[number];
+
+const CATEGORY_ITEMS: Record<CategoryId, { id: string; emoji: string }[]> = {
+  fruits: [
+    { id: 'apple', emoji: '🍎' },
+    { id: 'banana', emoji: '🍌' },
+    { id: 'grapes', emoji: '🍇' },
+    { id: 'orange', emoji: '🍊' },
+    { id: 'strawberry', emoji: '🍓' },
+    { id: 'watermelon', emoji: '🍉' },
+  ],
+  vegetables: [
+    { id: 'carrot', emoji: '🥕' },
+    { id: 'potato', emoji: '🥔' },
+    { id: 'tomato', emoji: '🍅' },
+    { id: 'onion', emoji: '🧅' },
+    { id: 'corn', emoji: '🌽' },
+    { id: 'broccoli', emoji: '🥦' },
+  ],
+  animals: [
+    { id: 'dog', emoji: '🐶' },
+    { id: 'cat', emoji: '🐱' },
+    { id: 'cow', emoji: '🐄' },
+    { id: 'elephant', emoji: '🐘' },
+    { id: 'rabbit', emoji: '🐰' },
+    { id: 'horse', emoji: '🐴' },
+  ],
+  clothing: [
+    { id: 'shirt', emoji: '👕' },
+    { id: 'shoe', emoji: '👟' },
+    { id: 'hat', emoji: '🎩' },
+    { id: 'sock', emoji: '🧦' },
+    { id: 'glove', emoji: '🧤' },
+    { id: 'scarf', emoji: '🧣' },
+  ],
+  kitchen: [
+    { id: 'cup', emoji: '☕' },
+    { id: 'plate', emoji: '🍽️' },
+    { id: 'spoon', emoji: '🥄' },
+    { id: 'fork', emoji: '🍴' },
+    { id: 'pot', emoji: '🍲' },
+    { id: 'pan', emoji: '🍳' },
+  ],
+  vehicles: [
+    { id: 'car', emoji: '🚗' },
+    { id: 'bus', emoji: '🚌' },
+    { id: 'bicycle', emoji: '🚲' },
+    { id: 'boat', emoji: '⛵' },
+    { id: 'train', emoji: '🚆' },
+    { id: 'airplane', emoji: '✈️' },
+  ],
+};
 
 export type SortableObject = {
   id: string;
-  category: ObjectCategory;
+  category: CategoryId;
+  itemId: string;
+  emoji: string;
 };
 
 export type SortingRound = {
-  bins: ObjectCategory[];
+  bins: CategoryId[];
   objects: SortableObject[];
 };
+
+function shuffled<T>(items: readonly T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
 
 export function generateRound(
   objectCount: number,
   binCount: number,
 ): SortingRound {
-  const bins = OBJECT_CATEGORIES.slice(0, binCount);
-  const objects: SortableObject[] = Array.from(
-    { length: objectCount },
-    (_, index) => ({
-      id: String(index),
-      category: bins[Math.floor(Math.random() * bins.length)],
-    }),
+  const bins = SORTING_CATEGORIES.slice(
+    0,
+    Math.min(binCount, SORTING_CATEGORIES.length),
   );
+  const pool: SortableObject[] = bins.flatMap(category =>
+    CATEGORY_ITEMS[category].map(item => ({
+      id: `${category}-${item.id}`,
+      category,
+      itemId: item.id,
+      emoji: item.emoji,
+    })),
+  );
+  const objects = shuffled(pool).slice(0, Math.min(objectCount, pool.length));
   return { bins, objects };
 }

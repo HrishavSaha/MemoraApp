@@ -1,8 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Animated,
+  PanResponder,
   Pressable,
   StyleSheet,
   Text,
@@ -13,7 +15,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   generateRound,
-  type ObjectCategory,
+  type CategoryId,
   type ObjectSortingProgress,
   type SortableObject,
 } from '../../data/objectSortingGame';
@@ -24,21 +26,11 @@ import type { RootStackParamList } from '../../navigation/types';
 
 const CURRENT_PATIENT = PATIENTS[0];
 
-const TAP_FEEDBACK_MS = 300;
 const ROUND_RESULT_DISPLAY_MS = 2000;
 
-const CATEGORY_COLORS: Record<ObjectCategory, string> = {
-  red: '#D64545',
-  blue: '#2E6FDE',
-  green: '#2E9E5B',
-  yellow: '#E0B400',
-  purple: '#8A4FD6',
-  orange: '#E07A2E',
-  pink: '#E0559B',
-  teal: '#1B9E9E',
-};
-
 type Phase = 'ready' | 'input' | 'success' | 'fail';
+
+type BinRect = { x: number; y: number; width: number; height: number };
 
 function vibrateIfEnabled(pattern?: number | number[]) {
   if (isHapticsEnabled()) {
@@ -57,13 +49,16 @@ function ObjectSortingGameScreen() {
   const { progress, recordResult } = useObjectSortingGame(CURRENT_PATIENT.id);
 
   const [phase, setPhase] = useState<Phase>('ready');
-  const [bins, setBins] = useState<ObjectCategory[]>([]);
+  const [bins, setBins] = useState<CategoryId[]>([]);
   const [objects, setObjects] = useState<SortableObject[]>([]);
-  const [sortedCount, setSortedCount] = useState(0);
-  const [litBin, setLitBin] = useState<ObjectCategory | null>(null);
-  const [wrongBin, setWrongBin] = useState<ObjectCategory | null>(null);
+  const [sortedIds, setSortedIds] = useState<Set<string>>(new Set());
+  const [wrongBin, setWrongBin] = useState<CategoryId | null>(null);
 
   const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const binRefs = useRef<
+    Partial<Record<CategoryId, ComponentRef<typeof View> | null>>
+  >({});
+  const binLayouts = useRef<Partial<Record<CategoryId, BinRect>>>({});
 
   const backgroundColor = isDarkMode ? '#0F1A24' : '#F5F8F8';
   const cardColor = isDarkMode ? '#152631' : '#FFFFFF';
@@ -87,8 +82,7 @@ function ObjectSortingGameScreen() {
     const round = generateRound(forProgress.objectCount, forProgress.binCount);
     setBins(round.bins);
     setObjects(round.objects);
-    setSortedCount(0);
-    setLitBin(null);
+    setSortedIds(new Set());
     setWrongBin(null);
     setPhase('input');
   };
@@ -98,22 +92,59 @@ function ObjectSortingGameScreen() {
     startRound(progress);
   };
 
-  const handleBinPress = (category: ObjectCategory) => {
+  const measureBin = (category: CategoryId) => {
+    binRefs.current[category]?.measure(
+      (_x, _y, width, height, pageX, pageY) => {
+        binLayouts.current[category] = { x: pageX, y: pageY, width, height };
+      },
+    );
+  };
+
+  // `onLayout` only fires when a bin's position/size actually changes, so a
+  // basket that lands in the same spot as last round (same category, same
+  // slot) never re-fires it. Re-measure every basket after each round's
+  // layout commits so drop targets can't go stale between rounds.
+  useEffect(() => {
+    bins.forEach(measureBin);
+  }, [bins]);
+
+  const findBinAt = (pageX: number, pageY: number): CategoryId | null => {
+    for (const category of bins) {
+      const rect = binLayouts.current[category];
+      if (
+        rect &&
+        pageX >= rect.x &&
+        pageX <= rect.x + rect.width &&
+        pageY >= rect.y &&
+        pageY <= rect.y + rect.height
+      ) {
+        return category;
+      }
+    }
+    return null;
+  };
+
+  const handleObjectDropped = (
+    object: SortableObject,
+    pageX: number,
+    pageY: number,
+  ) => {
     if (phase !== 'input') {
       return;
     }
 
-    const currentObject = objects[sortedCount];
+    const bin = findBinAt(pageX, pageY);
+    if (!bin) {
+      return;
+    }
 
-    if (category === currentObject.category) {
+    if (bin === object.category) {
       vibrateIfEnabled(15);
-      setLitBin(category);
-      schedule(() => setLitBin(null), TAP_FEEDBACK_MS);
+      const nextSortedIds = new Set(sortedIds);
+      nextSortedIds.add(object.id);
+      setSortedIds(nextSortedIds);
 
-      const nextCount = sortedCount + 1;
-      setSortedCount(nextCount);
-
-      if (nextCount === objects.length) {
+      if (nextSortedIds.size === objects.length) {
         const nextProgress = recordResult('win');
         setPhase('success');
         schedule(() => startRound(nextProgress), ROUND_RESULT_DISPLAY_MS);
@@ -122,7 +153,7 @@ function ObjectSortingGameScreen() {
     }
 
     vibrateIfEnabled([0, 80, 60, 80]);
-    setWrongBin(category);
+    setWrongBin(bin);
     const nextProgress = recordResult('loss');
     setPhase('fail');
     schedule(() => startRound(nextProgress), ROUND_RESULT_DISPLAY_MS);
@@ -138,7 +169,7 @@ function ObjectSortingGameScreen() {
         });
       case 'fail':
         return t('objectSortingGame.failSubtitle', {
-          sorted: sortedCount,
+          sorted: sortedIds.size,
           total: objects.length,
         });
       default:
@@ -146,7 +177,7 @@ function ObjectSortingGameScreen() {
     }
   };
 
-  const currentObject = phase === 'input' ? objects[sortedCount] : null;
+  const visibleObjects = objects.filter(object => !sortedIds.has(object.id));
 
   return (
     <View style={[styles.screen, { backgroundColor }]}>
@@ -196,59 +227,48 @@ function ObjectSortingGameScreen() {
           </Text>
         </View>
 
-        {currentObject && (
-          <View
-            style={[
-              styles.currentObject,
-              { backgroundColor: CATEGORY_COLORS[currentObject.category] },
-            ]}
-          />
-        )}
-
-        <View style={styles.bins}>
-          {bins.map(category => {
-            const isLit = litBin === category;
-            const isWrong = wrongBin === category;
-            return (
-              <Pressable
-                key={category}
-                disabled={phase !== 'input'}
-                accessibilityLabel={t(`objectSortingGame.colors.${category}`)}
-                onPress={() => handleBinPress(category)}
-                style={({ pressed }) => [
-                  styles.bin,
-                  { backgroundColor: cardColor },
-                  pressed && phase === 'input' && styles.binPressed,
-                ]}
-              >
-                <View
-                  style={[
-                    styles.binSwatch,
-                    {
-                      backgroundColor: CATEGORY_COLORS[category],
-                      borderColor: isWrong
-                        ? '#D64545'
-                        : isLit
-                        ? '#2E9E5B'
-                        : 'transparent',
-                    },
-                  ]}
+        {phase !== 'ready' && (
+          <>
+            <View style={styles.pool}>
+              {visibleObjects.map(object => (
+                <DraggableObject
+                  key={object.id}
+                  object={object}
+                  disabled={phase !== 'input'}
+                  cardColor={cardColor}
+                  onDropped={handleObjectDropped}
                 />
-                <Text style={[styles.binLabel, { color: textColor }]}>
-                  {t(`objectSortingGame.colors.${category}`)}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
+              ))}
+            </View>
 
-        {phase === 'input' && (
-          <Text style={[styles.progressLabel, { color: subTextColor }]}>
-            {t('objectSortingGame.progress', {
-              sorted: sortedCount,
-              total: objects.length,
-            })}
-          </Text>
+            <View style={styles.bins}>
+              {bins.map(category => (
+                <View
+                  key={category}
+                  ref={el => {
+                    binRefs.current[category] = el;
+                  }}
+                  onLayout={() => measureBin(category)}
+                  style={[
+                    styles.bin,
+                    { backgroundColor: cardColor },
+                    wrongBin === category && styles.binWrong,
+                  ]}
+                >
+                  <Text style={[styles.binLabel, { color: textColor }]}>
+                    {t(`objectSortingGame.categories.${category}`)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+
+            <Text style={[styles.progressLabel, { color: subTextColor }]}>
+              {t('objectSortingGame.progress', {
+                sorted: sortedIds.size,
+                total: objects.length,
+              })}
+            </Text>
+          </>
         )}
 
         {phase === 'ready' && (
@@ -266,6 +286,74 @@ function ObjectSortingGameScreen() {
         )}
       </View>
     </View>
+  );
+}
+
+function DraggableObject({
+  object,
+  disabled,
+  cardColor,
+  onDropped,
+}: {
+  object: SortableObject;
+  disabled: boolean;
+  cardColor: string;
+  onDropped: (object: SortableObject, pageX: number, pageY: number) => void;
+}) {
+  const { t } = useTranslation();
+  const pan = useRef(new Animated.ValueXY()).current;
+  const [isDragging, setIsDragging] = useState(false);
+  const disabledRef = useRef(disabled);
+  const onDroppedRef = useRef(onDropped);
+
+  useEffect(() => {
+    disabledRef.current = disabled;
+  }, [disabled]);
+
+  useEffect(() => {
+    onDroppedRef.current = onDropped;
+  }, [onDropped]);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => !disabledRef.current,
+      onMoveShouldSetPanResponder: () => !disabledRef.current,
+      onPanResponderGrant: () => setIsDragging(true),
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
+        useNativeDriver: false,
+      }),
+      onPanResponderRelease: (_event, gestureState) => {
+        setIsDragging(false);
+        onDroppedRef.current(object, gestureState.moveX, gestureState.moveY);
+        Animated.spring(pan, {
+          toValue: { x: 0, y: 0 },
+          friction: 6,
+          useNativeDriver: false,
+        }).start();
+      },
+      onPanResponderTerminate: () => {
+        setIsDragging(false);
+        Animated.spring(pan, {
+          toValue: { x: 0, y: 0 },
+          friction: 6,
+          useNativeDriver: false,
+        }).start();
+      },
+    }),
+  ).current;
+
+  return (
+    <Animated.View
+      {...panResponder.panHandlers}
+      accessibilityLabel={t(`objectSortingGame.items.${object.itemId}`)}
+      style={[
+        styles.objectChip,
+        { backgroundColor: cardColor, transform: pan.getTranslateTransform() },
+        isDragging && styles.objectChipDragging,
+      ]}
+    >
+      <Text style={styles.objectEmoji}>{object.emoji}</Text>
+    </Animated.View>
   );
 }
 
@@ -320,10 +408,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-  currentObject: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
+  pool: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    justifyContent: 'center',
+    minHeight: 56,
+  },
+  objectChip: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  objectEmoji: {
+    fontSize: 28,
+  },
+  objectChipDragging: {
+    zIndex: 10,
+    elevation: 10,
+    shadowColor: '#000000',
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
   },
   bins: {
     flexDirection: 'row',
@@ -332,25 +440,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bin: {
-    width: 84,
+    width: 96,
+    height: 72,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    borderRadius: 16,
-    paddingVertical: 14,
+    paddingHorizontal: 8,
   },
-  binPressed: {
-    opacity: 0.8,
-  },
-  binSwatch: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    borderWidth: 3,
+  binWrong: {
+    backgroundColor: '#D64545',
   },
   binLabel: {
     fontSize: 12,
     fontWeight: '600',
+    textAlign: 'center',
   },
   progressLabel: {
     fontSize: 13,
