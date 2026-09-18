@@ -132,6 +132,10 @@ function PatientHomeScreen() {
       navigation.navigate('ObjectSortingGame');
       return;
     }
+    if (index === 2) {
+      navigation.navigate('FlashcardsGame');
+      return;
+    }
     Alert.alert(
       t('patientHome.gameComingSoonTitle', { number: index + 1 }),
       t('patientHome.comingSoon'),
@@ -319,6 +323,7 @@ function PatientHomeScreen() {
             availableGames={[
               { glyph: '🧩', label: t('tilePatternGame.title') },
               { glyph: '🎯', label: t('objectSortingGame.title') },
+              { glyph: '🗂️', label: t('flashcardsGame.title') },
             ]}
             label={t('patientHome.comingSoon')}
             onPressGame={handleGamePress}

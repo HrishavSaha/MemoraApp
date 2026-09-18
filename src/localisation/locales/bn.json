@@ -180,5 +180,35 @@
       "pink": "গোলাপি",
       "teal": "ফিরোজা"
     }
+  },
+  "flashcardsGame": {
+    "title": "ফ্ল্যাশকার্ড",
+    "subtitle": "শব্দটি দেখতে কার্ডে চাপ দিন, তারপর বলুন আপনার মনে ছিল কিনা।",
+    "level": "{{count}}টি কার্ড",
+    "start": "শুরু করুন",
+    "whatIsThis": "একে কী বলে?",
+    "tapToReveal": "দেখতে চাপ দিন",
+    "didYouRemember": "আপনার মনে ছিল কি?",
+    "correct": "আমার মনে ছিল",
+    "wrong": "আমার মনে ছিল না",
+    "progress": "{{total}}টির মধ্যে {{current}}",
+    "deckCompleteTitle": "সেট সম্পূর্ণ হয়েছে!",
+    "deckCompleteSubtitle": "আপনার {{total}}টির মধ্যে {{correct}}টি মনে ছিল",
+    "words": {
+      "apple": "আপেল",
+      "banana": "কলা",
+      "dog": "কুকুর",
+      "cat": "বিড়াল",
+      "sun": "সূর্য",
+      "moon": "চাঁদ",
+      "star": "তারা",
+      "tree": "গাছ",
+      "flower": "ফুল",
+      "fish": "মাছ",
+      "bird": "পাখি",
+      "book": "বই",
+      "chair": "চেয়ার",
+      "umbrella": "ছাতা"
+    }
   }
 }

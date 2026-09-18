@@ -180,5 +180,35 @@
       "pink": "গোলাপী",
       "teal": "ফিৰোজা"
     }
+  },
+  "flashcardsGame": {
+    "title": "ফ্লেশকাৰ্ড",
+    "subtitle": "শব্দটো চাবলৈ কাৰ্ডত টিপক, তাৰপাছত কওক আপোনাৰ মনত আছিল নে নাই।",
+    "level": "{{count}}টা কাৰ্ড",
+    "start": "আৰম্ভ কৰক",
+    "whatIsThis": "ইয়াক কি বোলে?",
+    "tapToReveal": "চাবলৈ টিপক",
+    "didYouRemember": "আপোনাৰ মনত আছিল নে?",
+    "correct": "মোৰ মনত আছিল",
+    "wrong": "মোৰ মনত নাছিল",
+    "progress": "{{total}}টাৰ ভিতৰত {{current}}",
+    "deckCompleteTitle": "ছেট সম্পূৰ্ণ হ'ল!",
+    "deckCompleteSubtitle": "আপোনাৰ {{total}}টাৰ ভিতৰত {{correct}}টা মনত আছিল",
+    "words": {
+      "apple": "আপেল",
+      "banana": "কল",
+      "dog": "কুকুৰ",
+      "cat": "মেকুৰী",
+      "sun": "সূৰ্য",
+      "moon": "জোন",
+      "star": "তৰা",
+      "tree": "গছ",
+      "flower": "ফুল",
+      "fish": "মাছ",
+      "bird": "চৰাই",
+      "book": "কিতাপ",
+      "chair": "চেয়াৰ",
+      "umbrella": "ছাতা"
+    }
   }
 }

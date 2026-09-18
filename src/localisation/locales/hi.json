@@ -180,5 +180,35 @@
       "pink": "गुलाबी",
       "teal": "फ़िरोज़ी"
     }
+  },
+  "flashcardsGame": {
+    "title": "फ़्लैशकार्ड",
+    "subtitle": "शब्द देखने के लिए कार्ड पर दबाएँ, फिर बताएँ कि आपको वह याद था या नहीं।",
+    "level": "{{count}} कार्ड",
+    "start": "शुरू करें",
+    "whatIsThis": "इसे क्या कहते हैं?",
+    "tapToReveal": "देखने के लिए दबाएँ",
+    "didYouRemember": "क्या आपको यह याद था?",
+    "correct": "मुझे याद था",
+    "wrong": "मुझे याद नहीं था",
+    "progress": "{{total}} में से {{current}}",
+    "deckCompleteTitle": "सेट पूरा हुआ!",
+    "deckCompleteSubtitle": "आपको {{total}} में से {{correct}} याद रहे",
+    "words": {
+      "apple": "सेब",
+      "banana": "केला",
+      "dog": "कुत्ता",
+      "cat": "बिल्ली",
+      "sun": "सूरज",
+      "moon": "चाँद",
+      "star": "तारा",
+      "tree": "पेड़",
+      "flower": "फूल",
+      "fish": "मछली",
+      "bird": "पक्षी",
+      "book": "किताब",
+      "chair": "कुर्सी",
+      "umbrella": "छाता"
+    }
   }
 }

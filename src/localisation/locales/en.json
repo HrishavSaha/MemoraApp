@@ -180,5 +180,35 @@
       "pink": "Pink",
       "teal": "Teal"
     }
+  },
+  "flashcardsGame": {
+    "title": "Flashcards",
+    "subtitle": "Tap a card to reveal the word, then say if you remembered it.",
+    "level": "{{count}} cards",
+    "start": "Start",
+    "whatIsThis": "What is this called?",
+    "tapToReveal": "Tap to reveal",
+    "didYouRemember": "Did you remember it?",
+    "correct": "I remembered it",
+    "wrong": "I didn't remember",
+    "progress": "{{current}} of {{total}}",
+    "deckCompleteTitle": "Deck complete!",
+    "deckCompleteSubtitle": "You remembered {{correct}} of {{total}}",
+    "words": {
+      "apple": "Apple",
+      "banana": "Banana",
+      "dog": "Dog",
+      "cat": "Cat",
+      "sun": "Sun",
+      "moon": "Moon",
+      "star": "Star",
+      "tree": "Tree",
+      "flower": "Flower",
+      "fish": "Fish",
+      "bird": "Bird",
+      "book": "Book",
+      "chair": "Chair",
+      "umbrella": "Umbrella"
+    }
   }
 }
